@@ -1,0 +1,23 @@
+<button
+    #button
+    type="button"
+    (pointerover)="onShowTooltip(button, templateRefContent)"
+    (pointerout)="onHideTooltip()">
+    Hover me
+</button>
+&nbsp;
+
+<button
+    type="button"
+    bbbTooltip="Hello World"
+    bbbTooltipTheme="dark">
+    Long-press to show tooltip
+</button>
+
+<ng-template
+    #templateRefContent
+    let-name>
+    <span
+        >Hello <strong>{{ name }}</strong>
+    </span>
+</ng-template>

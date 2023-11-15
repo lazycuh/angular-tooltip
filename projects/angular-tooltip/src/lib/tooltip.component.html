@@ -1,0 +1,9 @@
+<div
+    class="bbb-tooltip {{ _isVisible ? 'enter' : 'leave' }} {{ _theme }}{{ _className ? ' ' + _className : '' }}"
+    (animationend)="_onAnimationDone()">
+    <div class="bbb-tooltip__arrow"></div>
+    <div
+        class="bbb-tooltip__content"
+        [id]="_idForAriaDescribedBy"
+        [innerHTML]="_content"></div>
+</div>

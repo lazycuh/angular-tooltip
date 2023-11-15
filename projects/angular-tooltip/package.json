@@ -1,0 +1,41 @@
+{
+  "name": "@babybeet/angular-tooltip",
+  "description": "Easily show tooltips programmatically and/or declaratively in Angular",
+  "version": "0.0.1",
+  "author": {
+    "name": "Baby Beet"
+  },
+  "keywords": [
+    "angular",
+    "angular tooltip",
+    "angular tooltip component",
+    "angular tooltip ui",
+    "angular tooltip service",
+    "angular popup",
+    "angular popup component",
+    "angular popup ui",
+    "tooltip",
+    "tooltip component",
+    "tooltip service",
+    "tooltip ui",
+    "popup",
+    "popup component",
+    "popup ui",
+    "popup service"
+  ],
+  "peerDependencies": {
+    "@angular/common": "16 - 17",
+    "@angular/core": "16 - 17"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babybeet/angular-tooltip"
+  },
+  "devDependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}
