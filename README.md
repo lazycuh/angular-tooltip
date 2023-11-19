@@ -1,4 +1,4 @@
-# angular-tooltip
+# angular-tooltip [![](https://circleci.com/gh/babybeet/angular-tooltip.svg?style=svg&logo=appveyor)](https://app.circleci.com/pipelines/github/babybeet/angular-tooltip?branch=main)
 
 Easily show tooltips programmatically and/or declaratively in Angular.
 
