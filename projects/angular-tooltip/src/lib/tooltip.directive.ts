@@ -1,4 +1,15 @@
-import { AfterViewInit, Directive, ElementRef, Host, HostListener, Input, OnDestroy } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  Host,
+  HostListener,
+  Inject,
+  Input,
+  OnDestroy,
+  PLATFORM_ID
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Placement } from './placement';
@@ -30,6 +41,7 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
 
   constructor(
     @Host() private readonly _hostElement: ElementRef<HTMLElement>,
+    @Inject(PLATFORM_ID) private readonly _platformId: object,
     private readonly _tooltipService: TooltipService
   ) {}
 
@@ -39,6 +51,10 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (!isPlatformBrowser(this._platformId)) {
+      return;
+    }
+
     if (isMobile()) {
       this._longPressEventSubscription = watchForLongPress(this._hostElement.nativeElement).subscribe({
         next: event => {

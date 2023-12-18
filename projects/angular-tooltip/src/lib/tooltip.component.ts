@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Host,
-  OnDestroy,
-  ViewContainerRef,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Host, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
@@ -69,10 +61,7 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
    */
   private _afterClosedListener?: () => void;
 
-  constructor(
-    @Host() private readonly _host: ElementRef<HTMLElement>,
-    private readonly _viewContainerRef: ViewContainerRef
-  ) {}
+  constructor(@Host() private readonly _host: ElementRef<HTMLElement>) {}
 
   ngAfterViewInit() {
     if (![Placement.HORIZONTAL, Placement.VERTICAL].includes(this._placement)) {
