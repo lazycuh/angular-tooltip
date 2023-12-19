@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { assertThat, delayBy } from '@babybeet/angular-testing-kit';
 
 import { Placement } from './placement';
-import { Theme } from './theme';
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
 
@@ -124,7 +123,7 @@ describe(TooltipService.name, () => {
 
     await delayBy(1000);
 
-    TooltipService.setDefaultTheme(Theme.DARK);
+    TooltipService.setDefaultTheme('dark');
 
     testBedComponent.showTooltip(document.createElement('button'));
 
@@ -134,12 +133,12 @@ describe(TooltipService.name, () => {
     assertThat(`${classSelectorPrefix}.dark`).exists();
 
     // Set back to the expected default
-    TooltipService.setDefaultTheme(Theme.LIGHT);
+    TooltipService.setDefaultTheme('light');
   });
 
   it('Should render with the provided theme', async () => {
     testBedComponent.showTooltip(document.createElement('button'), {
-      theme: Theme.DARK
+      theme: 'dark'
     });
 
     fixture.detectChanges();

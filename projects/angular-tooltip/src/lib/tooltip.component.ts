@@ -49,7 +49,7 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
    *
    * @private To be used by template
    */
-  _theme: Theme = Theme.LIGHT;
+  _theme: Theme = 'light';
 
   /**
    * The DOM element representing this tooltip

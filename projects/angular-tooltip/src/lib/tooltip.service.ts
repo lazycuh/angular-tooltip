@@ -14,7 +14,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
   providedIn: 'root'
 })
 export class TooltipService {
-  private static _defaultTheme = Theme.LIGHT;
+  private static _defaultTheme: Theme = 'light';
 
   private _tooltipRef: ComponentRef<TooltipComponent> | null = null;
 

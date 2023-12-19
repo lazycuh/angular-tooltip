@@ -92,7 +92,7 @@ describe(TooltipDirective.name, () => {
   });
 
   it('Should render with the provided theme properly', async () => {
-    testBedComponent.theme = Theme.DARK;
+    testBedComponent.theme = 'dark';
     fixture.detectChanges();
 
     testBedComponent.dispatchEvent('pointerover');

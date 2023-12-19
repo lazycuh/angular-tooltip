@@ -29,7 +29,7 @@ export interface TooltipConfiguration<C extends Record<string, unknown> | unknow
   placement?: Placement;
 
   /**
-   * The optional theme for this tooltip. Default is {@link Theme.LIGHT Theme.LIGHT}.
+   * The optional theme for this tooltip. Default is `light`.
    */
   theme?: Theme;
 }

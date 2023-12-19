@@ -34,7 +34,7 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('bbbTooltipTheme')
   // eslint-disable-next-line @stylistic/indent
-  _theme: 'dark' | 'light' | Theme = Theme.LIGHT;
+  _theme: Theme = 'light';
 
   private _longPressEventSubscription?: Subscription;
   private _isLongPressing = false;
