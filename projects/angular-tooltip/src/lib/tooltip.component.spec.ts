@@ -3,7 +3,6 @@ import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angul
 import { By } from '@angular/platform-browser';
 import { assertThat } from '@babybeet/angular-testing-kit';
 
-import { Placement } from './placement';
 import { TooltipComponent } from './tooltip.component';
 
 describe(TooltipComponent.name, () => {
@@ -67,7 +66,7 @@ describe(TooltipComponent.name, () => {
   });
 
   it('Should be placed at the right of anchor element if placement is horizontal', fakeAsync(() => {
-    component.setPlacement(Placement.HORIZONTAL);
+    component.setPlacement('horizontal');
     component.show(document.createElement('button'), document.createElement('div'));
     fixture.detectChanges();
     tick();
@@ -81,7 +80,7 @@ describe(TooltipComponent.name, () => {
     anchor.setAttribute('style', ['position:fixed', 'right:0'].join(';'));
     document.body.appendChild(anchor);
 
-    component.setPlacement(Placement.HORIZONTAL);
+    component.setPlacement('horizontal');
     component.show(anchor, document.createElement('span'));
     fixture.detectChanges();
     tick();

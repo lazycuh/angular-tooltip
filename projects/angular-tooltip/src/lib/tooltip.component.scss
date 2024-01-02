@@ -23,6 +23,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     box-shadow: var(--tooltip-shadow);
     border: var(--tooltip-border);
     pointer-events: auto;
+    visibility: hidden;
 
     &.dark {
         --tooltip-bg-color: #353535;

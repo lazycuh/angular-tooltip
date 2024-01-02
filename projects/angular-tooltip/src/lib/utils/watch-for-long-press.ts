@@ -4,9 +4,11 @@ import { finalize } from 'rxjs/operators';
 export function watchForLongPress(target: HTMLElement) {
   let timeoutId: number;
   const notifier = new Subject<PointerEvent>();
+
   const pointerdown = (event: PointerEvent) => {
     timeoutId = window.setTimeout(() => notifier.next(event), 500);
   };
+
   const pointerup = () => {
     window.clearTimeout(timeoutId);
   };

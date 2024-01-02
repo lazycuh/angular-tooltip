@@ -2,7 +2,6 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { assertThat, delayBy } from '@babybeet/angular-testing-kit';
 
-import { Placement } from './placement';
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
 
@@ -116,6 +115,8 @@ describe(TooltipService.name, () => {
 
     fixture.detectChanges();
 
+    await delayBy(1000);
+
     assertThat(`${classSelectorPrefix}.dark`).doesNotExist();
     assertThat(`${classSelectorPrefix}.light`).exists();
 
@@ -128,6 +129,8 @@ describe(TooltipService.name, () => {
     testBedComponent.showTooltip(document.createElement('button'));
 
     fixture.detectChanges();
+
+    await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}.light`).doesNotExist();
     assertThat(`${classSelectorPrefix}.dark`).exists();
@@ -156,7 +159,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should be able to configure the placement', () => {
-    testBedComponent.showTooltip(document.createElement('button'), { placement: Placement.HORIZONTAL });
+    testBedComponent.showTooltip(document.createElement('button'), { placement: 'horizontal' });
 
     fixture.detectChanges();
 

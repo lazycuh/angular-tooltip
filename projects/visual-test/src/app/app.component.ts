@@ -1,6 +1,5 @@
 import { Component, TemplateRef } from '@angular/core';
-import { Placement } from 'projects/angular-tooltip/src/lib/placement';
-import { Theme, TooltipService } from 'projects/angular-tooltip/src/public-api';
+import { TooltipService } from 'projects/angular-tooltip/src/public-api';
 
 @Component({
   selector: 'bbb-root',
@@ -16,8 +15,8 @@ export class AppComponent {
       context: {
         $implicit: 'TemplateRef'
       },
-      placement: Placement.VERTICAL,
-      theme: Theme.DARK
+      placement: 'vertical',
+      theme: 'dark'
     });
   }
 

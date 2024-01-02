@@ -58,7 +58,7 @@ The tooltip component that gets created handles wiring up `aria-describedby` att
 
 ## Tooltip placement
 
-There are 2 supported placement values: `Placement.VERTICAL` (`vertical`) and `Placement.HORIZONTAL` (`horizontal`). `Placement.VERTICAL` will either place the tooltip at the bottom or top of the anchor element depending on which side has enough space for the tooltip to not be cutoff. Similarly, `Placement.VERTICAL` will either place the tooltip at the right or left of the anchor element depending on which side has enough space for the tooltip to not be cutoff. By default, `Placement.VERTICAL` is used and the tooltip is placed at the bottom of the anchor.
+There are 2 supported placement values: `vertical` and `horizontal`. `vertical` will either place the tooltip at the bottom or top of the anchor element depending on which side has enough space for the tooltip to not be cutoff. Similarly, `horizontal` will either place the tooltip at the right or left of the anchor element depending on which side has enough space for the tooltip to not be cutoff. By default, `vertical` is used and the tooltip is placed at the bottom of the anchor.
 
 ## Using `TooltipDirective`
 
@@ -91,9 +91,9 @@ Sets the theme. Must be either `dark` or `light`. `dark` is the default if not p
         <button
             bbbTooltip='Hello World'
             <!-- if "bbbTooltipPlacement" is not specified, "vertical" is assumed -->
-            kunTooltipPlacement='vertical'
-            <!-- if "kunTooltipTheme" is not specified, "dark" is assumed -->
-            kunTooltipTheme='dark'>
+            bbbTooltipPlacement='vertical'
+            <!-- if "bbbTooltipTheme" is not specified, "dark" is assumed -->
+            bbbTooltipTheme='dark'>
             Hover me
         </button>
     `
@@ -191,11 +191,11 @@ interface TooltipConfiguration<C extends Record<string, unknown> | unknown = unk
    */
   context?: C;
   /**
-   * Where to position the tooltip. Default is `Placement.VERTICAL`.
+   * Where to position the tooltip. Default is `vertical`.
    */
   placement?: Placement;
   /**
-   * The optional theme for this tooltip. Default is `Theme.LIGHT Theme.LIGHT`.
+   * The optional theme for this tooltip. Default is `light`.
    */
   theme?: Theme;
 }
@@ -206,29 +206,26 @@ interface TooltipConfiguration<C extends Record<string, unknown> | unknown = unk
 Describes the direction in which the tooltip is placed with respect to its anchor.
 
 ```ts
-const enum Placement {
+type Placement =
   /**
    * The tooltip will be placed either at the bottom or at the top with respect to its anchor
    * depending on how much available space there is in that direction. By default,
    * the tooltip will be placed at the bottom of its anchor for this placement.
    */
-  HORIZONTAL = 'horizontal',
+  | 'horizontal'
+
   /**
    * The tooltip will be placed either at the left or at the right with respect to its anchor
    * depending on how much available space there is in that direction. By default,
    * the tooltip will be placed at the right of its anchor for this placement.
    */
-  VERTICAL = 'vertical'
-}
+  | 'vertical';
 ```
 
 ### `Theme`
 
 ```ts
-const enum Theme {
-  LIGHT = 'light',
-  DARK = 'dark'
-}
+type Theme = 'light' | 'dark';
 ```
 
 <br/>
@@ -260,8 +257,8 @@ export class TestComponent {
     this.tooltipService.show(trigger, {
       content: 'This is a tooltip',
       className: 'optional-class-name',
-      placement: Placement.HORIZONTAL,
-      theme: Theme.LIGHT
+      placement: 'horizontal',
+      theme: 'light'
     });
   }
 
@@ -315,8 +312,8 @@ export class TestComponent {
       context: {
         $implicit: 'TemplateRef'
       },
-      placement: Placement.VERTICAL,
-      theme: Theme.DARK
+      placement: 'vertical',
+      theme: 'dark'
     });
   }
 

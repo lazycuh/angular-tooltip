@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Host, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Host, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
@@ -14,26 +14,10 @@ import { Theme } from './theme';
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html'
 })
-export class TooltipComponent implements AfterViewInit, OnDestroy {
-  /**
-   * @private To be used by template
-   */
-  _content = '';
-
-  /**
-   * @private To be used by template
-   */
-  _placement = Placement.VERTICAL;
-
-  /**
-   * @private To be used by template
-   */
-  _isVisible = false;
-
-  /**
-   * @private To be used by template
-   */
-  _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
+export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected _content = '';
+  protected _placement?: Placement;
+  protected _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
     .substring(5, 15)
     .toLowerCase()}__`;
 
@@ -42,14 +26,12 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
    *
    * @private To be used by template
    */
-  _className?: string;
+  protected _className?: string;
 
   /**
    * The current theme for this tooltip.
-   *
-   * @private To be used by template
    */
-  _theme: Theme = 'light';
+  protected _theme?: Theme;
 
   /**
    * The DOM element representing this tooltip
@@ -61,18 +43,28 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
    */
   private _afterClosedListener?: () => void;
 
+  private _isVisible = false;
+
   constructor(@Host() private readonly _host: ElementRef<HTMLElement>) {}
 
-  ngAfterViewInit() {
-    if (![Placement.HORIZONTAL, Placement.VERTICAL].includes(this._placement)) {
-      throw new Error(`Invalid tooltip placement: ${this._placement}`);
+  ngOnInit(): void {
+    if (this._placement === undefined) {
+      this._placement = 'vertical';
     }
 
+    if (this._theme === undefined) {
+      this._theme = 'light';
+    }
+  }
+
+  ngAfterViewInit() {
     this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
   }
 
   hide() {
     this._isVisible = false;
+    this._tooltip.classList.remove('enter');
+    this._tooltip.classList.add('leave');
   }
 
   ngOnDestroy() {
@@ -107,16 +99,18 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
   }
 
   private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element) {
-    this._isVisible = true;
     this._tooltip.querySelector('.bbb-tooltip__content')?.appendChild(content);
 
     switch (this._placement) {
-      case Placement.VERTICAL:
+      case 'vertical':
         this._showBottom(anchorBoundingBox);
         break;
-      case Placement.HORIZONTAL:
+      case 'horizontal':
         this._showRight(anchorBoundingBox);
         break;
+
+      default:
+        throw new Error(`Invalid placement: ${String(this._placement)}`);
     }
   }
 
@@ -172,6 +166,10 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
         this._calculateLeftEdgeOverflowingDistance(tooltipLeft);
       this._tooltip.style.left = `${tooltipLeft - horizontalDifference}px`;
       this._tooltip.style.top = `${tooltipTop}px`;
+      this._tooltip.style.visibility = 'visible';
+
+      this._isVisible = true;
+      this._tooltip.classList.add('enter');
     }, 0);
   }
 
@@ -185,8 +183,10 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
 
     if (difference > spacing) {
       (this._tooltip.querySelector('.bbb-tooltip__arrow') as HTMLElement).style.left = `calc(50% + ${difference}px)`;
+
       return difference;
     }
+
     return 0;
   }
 
@@ -203,6 +203,7 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
 
       return left - spacing;
     }
+
     return 0;
   }
 
@@ -259,6 +260,11 @@ export class TooltipComponent implements AfterViewInit, OnDestroy {
         this._calculateLeftEdgeOverflowingDistance(tooltipLeft);
       this._tooltip.style.left = `${tooltipLeft - horizontalDifference}px`;
       this._tooltip.style.top = `${tooltipTop}px`;
+      this._tooltip.style.visibility = 'visible';
+
+      this._isVisible = true;
+
+      this._tooltip.classList.add('enter');
     }, 0);
   }
 

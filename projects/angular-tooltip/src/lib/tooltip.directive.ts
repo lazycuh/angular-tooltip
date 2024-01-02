@@ -23,21 +23,19 @@ import { isMobile, watchForLongPress } from './utils';
 })
 export class TooltipDirective implements OnDestroy, AfterViewInit {
   @Input('bbbTooltip')
-  // eslint-disable-next-line @stylistic/indent
   _content = '';
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('bbbTooltipPlacement')
-  // eslint-disable-next-line @stylistic/indent
   _placement?: 'vertical' | 'horizontal' | Placement;
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('bbbTooltipTheme')
-  // eslint-disable-next-line @stylistic/indent
   _theme: Theme = 'light';
 
   private _longPressEventSubscription?: Subscription;
   private _isLongPressing = false;
+  private _timeoutId = -1;
 
   constructor(
     @Host() private readonly _hostElement: ElementRef<HTMLElement>,
@@ -70,16 +68,23 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
 
     event.stopPropagation();
 
-    this._tooltipService.show(event.target as Element, {
-      content: this._content,
-      placement: this._placement as Placement,
-      theme: this._theme as Theme
-    });
+    this._timeoutId = setTimeout(() => {
+      this._tooltipService.show(event.target as Element, {
+        content: this._content,
+        placement: this._placement as Placement,
+        theme: this._theme as Theme
+      });
+    }, 500);
   }
 
   private _hideTooltip(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
-    this._tooltipService.hide();
+
+    if (this._timeoutId !== -1) {
+      this._tooltipService.hide();
+      clearTimeout(this._timeoutId);
+      this._timeoutId = -1;
+    }
   }
 
   /**

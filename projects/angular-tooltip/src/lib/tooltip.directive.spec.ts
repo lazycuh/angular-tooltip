@@ -79,7 +79,7 @@ describe(TooltipDirective.name, () => {
   });
 
   it('Should render with the provided placement properly', async () => {
-    testBedComponent.placement = Placement.HORIZONTAL;
+    testBedComponent.placement = 'horizontal';
     fixture.detectChanges();
 
     testBedComponent.dispatchEvent('pointerover');
@@ -115,11 +115,13 @@ describe(TooltipDirective.name, () => {
   });
 
   it('Should hide tooltip on pointerout', async () => {
+    spyOnProperty(navigator, 'userAgent', 'get').and.callFake(() => 'chrome');
+
     testBedComponent.dispatchEvent('pointerover');
 
     fixture.detectChanges();
 
-    await delayBy(500);
+    await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 
@@ -127,7 +129,7 @@ describe(TooltipDirective.name, () => {
 
     fixture.detectChanges();
 
-    await delayBy(500);
+    await delayBy(1000);
 
     assertThat(classSelectorPrefix).doesNotExist();
   });
@@ -151,14 +153,14 @@ describe(TooltipDirective.name, () => {
     testBedComponent.dispatchEvent('keyup');
     fixture.detectChanges();
 
-    await delayBy(500);
+    await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 
     testBedComponent.buttonRef.nativeElement.blur();
     fixture.detectChanges();
 
-    await delayBy(500);
+    await delayBy(1000);
 
     assertThat(classSelectorPrefix).doesNotExist();
   });
@@ -191,7 +193,7 @@ describe(`${TooltipDirective.name} on mobile`, () => {
     testBedComponent.dispatchEvent('pointerdown');
     fixture.detectChanges();
 
-    await delayBy(1000);
+    await delayBy(1500);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 

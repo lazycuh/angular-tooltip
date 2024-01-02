@@ -24,7 +24,7 @@ export interface TooltipConfiguration<C extends Record<string, unknown> | unknow
   context?: C;
 
   /**
-   * Where to position the tooltip. Default is {@link Placement.VERTICAL}.
+   * Where to position the tooltip. Default is `vertical`.
    */
   placement?: Placement;
 

@@ -101,6 +101,7 @@ export class TooltipService {
          */
         rootNode: embeddedView.rootNodes.reduce((contentRoot: Element, next) => {
           contentRoot.appendChild(next);
+
           return contentRoot;
         }, document.createDocumentFragment())
       };
