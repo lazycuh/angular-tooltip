@@ -64,11 +64,11 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
   }
 
   private _showTooltip(event: MouseEvent | KeyboardEvent | PointerEvent) {
-    this._hideTooltip(event);
-
     event.stopPropagation();
 
-    this._timeoutId = setTimeout(() => {
+    this._hideTooltip(event);
+
+    this._timeoutId = window.setTimeout(() => {
       this._tooltipService.show(event.target as Element, {
         content: this._content,
         placement: this._placement as Placement,
@@ -79,12 +79,9 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
 
   private _hideTooltip(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
+    clearTimeout(this._timeoutId);
 
-    if (this._timeoutId !== -1) {
-      this._tooltipService.hide();
-      clearTimeout(this._timeoutId);
-      this._timeoutId = -1;
-    }
+    this._tooltipService.hide();
   }
 
   /**

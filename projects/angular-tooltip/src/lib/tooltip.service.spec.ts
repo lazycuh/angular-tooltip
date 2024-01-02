@@ -45,6 +45,7 @@ describe(TooltipService.name, () => {
   const classSelectorPrefix = '.bbb-tooltip';
   let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
+  let anchor: HTMLElement;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -56,14 +57,17 @@ describe(TooltipService.name, () => {
     fixture = TestBed.createComponent(TestBedComponent);
     testBedComponent = fixture.componentInstance;
     fixture.detectChanges();
+    anchor = document.createElement('button');
+    document.body.appendChild(anchor);
   });
 
   afterEach(() => {
+    document.body.removeChild(anchor);
     fixture.destroy();
   });
 
   it('Should render the provided string content correctly', async () => {
-    testBedComponent.showTooltip(document.createElement('button'), {
+    testBedComponent.showTooltip(anchor, {
       content: 'Hello World'
     });
 
@@ -73,7 +77,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should render the provided template ref content correctly', async () => {
-    testBedComponent.showTooltip(document.createElement('button'), {
+    testBedComponent.showTooltip(anchor, {
       content: testBedComponent.templateRefContent,
       context: {
         $implicit: 'TemplateRef'
@@ -92,7 +96,7 @@ describe(TooltipService.name, () => {
     })
     class ContentComponent {}
 
-    testBedComponent.showTooltip(document.createElement('button'), {
+    testBedComponent.showTooltip(anchor, {
       content: ContentComponent
     });
 
@@ -102,7 +106,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should use light theme by default', async () => {
-    testBedComponent.showTooltip(document.createElement('button'));
+    testBedComponent.showTooltip(anchor);
 
     fixture.detectChanges();
 
@@ -111,7 +115,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should be able to configure a different default theme', async () => {
-    testBedComponent.showTooltip(document.createElement('button'));
+    testBedComponent.showTooltip(anchor);
 
     fixture.detectChanges();
 
@@ -126,7 +130,7 @@ describe(TooltipService.name, () => {
 
     TooltipService.setDefaultTheme('dark');
 
-    testBedComponent.showTooltip(document.createElement('button'));
+    testBedComponent.showTooltip(anchor);
 
     fixture.detectChanges();
 
@@ -140,7 +144,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should render with the provided theme', async () => {
-    testBedComponent.showTooltip(document.createElement('button'), {
+    testBedComponent.showTooltip(anchor, {
       theme: 'dark'
     });
 
@@ -151,7 +155,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should add the provided class name', () => {
-    testBedComponent.showTooltip(document.createElement('button'), { className: 'hello-world' });
+    testBedComponent.showTooltip(anchor, { className: 'hello-world' });
 
     fixture.detectChanges();
 
@@ -159,7 +163,7 @@ describe(TooltipService.name, () => {
   });
 
   it('Should be able to configure the placement', () => {
-    testBedComponent.showTooltip(document.createElement('button'), { placement: 'horizontal' });
+    testBedComponent.showTooltip(anchor, { placement: 'horizontal' });
 
     fixture.detectChanges();
 

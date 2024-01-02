@@ -1,4 +1,4 @@
-import { ApplicationRef, ComponentRef, createComponent, Injectable, TemplateRef } from '@angular/core';
+import { ApplicationRef, createComponent, Injectable, TemplateRef } from '@angular/core';
 
 import { Theme } from './theme';
 import { TooltipComponent } from './tooltip.component';
@@ -16,7 +16,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
 export class TooltipService {
   private static _defaultTheme: Theme = 'light';
 
-  private _tooltipRef: ComponentRef<TooltipComponent> | null = null;
+  private readonly _openedTooltips = new Set<TooltipComponent>();
 
   constructor(private readonly _applicationRef: ApplicationRef) {}
 
@@ -37,9 +37,11 @@ export class TooltipService {
    * @param configuration The configuration object for this tooltip instance.
    */
   show(anchor: Element, configuration: TooltipConfiguration) {
-    const createdTooltipContent = this._prepareTooltip(configuration);
+    const result = this._prepareTooltip(configuration);
 
-    this._tooltipRef?.instance.show(anchor, createdTooltipContent.rootNode);
+    result.tooltipRef.instance.show(anchor, result.content.rootNode);
+
+    this._openedTooltips.add(result.tooltipRef.instance);
   }
 
   private _prepareTooltip(configuration: TooltipConfiguration) {
@@ -71,9 +73,10 @@ export class TooltipService {
 
     document.body.appendChild(tooltipRef.location.nativeElement);
 
-    this._tooltipRef = tooltipRef;
-
-    return createdContent;
+    return {
+      content: createdContent,
+      tooltipRef
+    };
   }
 
   private _createContent(configuration: TooltipConfiguration) {
@@ -126,15 +129,21 @@ export class TooltipService {
    * @param configuration The configuration object for this tooltip instance.
    */
   showAt(x: number, y: number, configuration: TooltipConfiguration) {
-    const createdTooltipContent = this._prepareTooltip(configuration);
+    const result = this._prepareTooltip(configuration);
 
-    this._tooltipRef?.instance.showAt(x, y, createdTooltipContent.rootNode);
+    result.tooltipRef.instance.showAt(x, y, result.content.rootNode);
+
+    this._openedTooltips.add(result.tooltipRef.instance);
   }
 
   /**
    * Hide the last opened tooltip.
    */
   hide() {
-    this._tooltipRef?.instance.hide();
+    for (const openedTooltip of this._openedTooltips) {
+      openedTooltip.hide();
+    }
+
+    this._openedTooltips.clear();
   }
 }

@@ -94,8 +94,10 @@ export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param content The tooltip content to show.
    */
   show(anchor: Element, content: Element) {
-    anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy);
-    this._showTooltip(anchor.getBoundingClientRect(), content);
+    if (document.body.contains(anchor)) {
+      anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy);
+      this._showTooltip(anchor.getBoundingClientRect(), content);
+    }
   }
 
   private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element) {
