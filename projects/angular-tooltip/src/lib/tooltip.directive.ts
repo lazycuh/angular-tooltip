@@ -103,6 +103,7 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
 
   @HostListener('pointerout', ['$event'])
   @HostListener('blur', ['$event'])
+  @HostListener('click', ['$event'])
   protected _onHideTooltip(event: MouseEvent | KeyboardEvent) {
     if (!this._isLongPressing) {
       this._hideTooltip(event);

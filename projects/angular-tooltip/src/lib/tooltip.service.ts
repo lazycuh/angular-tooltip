@@ -8,7 +8,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
  * This class allows to programmatically show a tooltip anchored at an element.
  * See {@see TooltipConfiguration} for the different options to configure the tooltip.
  * Please note that even though this class can create as many tooltips as desired,
- * it's only able to close the last opened tooltip.
+ * it cannot selectively close a tooltip, it can only close all currently opened tooltips.
  */
 @Injectable({
   providedIn: 'root'
@@ -137,7 +137,7 @@ export class TooltipService {
   }
 
   /**
-   * Hide the last opened tooltip.
+   * Hide all opened tooltips.
    */
   hide() {
     for (const openedTooltip of this._openedTooltips) {

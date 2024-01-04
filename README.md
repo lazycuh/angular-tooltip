@@ -136,7 +136,7 @@ On mobile devices, you can activate the tooltip by long-pressing the trigger ele
 
 ### `TooltipService`
 
-This class allows to programmatically show a tooltip anchored at an element. See `TooltipConfiguration` for the different options to configure the tooltip. Please note that even though this class can create as many tooltips as desired, it's only able to close the last opened tooltip.
+This class allows to programmatically show a tooltip anchored at an element. See {@see TooltipConfiguration} for the different options to configure the tooltip. Please note that even though this class can create as many tooltips as desired, it cannot selectively close a tooltip, it can only close all currently opened tooltips.
 
 ```ts
 class TooltipService {
@@ -146,6 +146,7 @@ class TooltipService {
    * @param theme The new theme to be used as the default.
    */
   static setDefaultTheme(theme: Theme): void;
+
   /**
    * Show a tooltip anchored at `anchor` with a configuration object specified by `configuration`.
    * Ensure that the last opened tooltip has been closed before calling this method.
@@ -153,6 +154,7 @@ class TooltipService {
    * @param anchor The target at which to place the tooltip.
    * @param configuration The configuration object for this tooltip instance.
    */
+
   show(anchor: Element, configuration: TooltipConfiguration): void;
 
   /**
@@ -166,7 +168,7 @@ class TooltipService {
   showAt(x: number, y: number, configuration: TooltipConfiguration): void;
 
   /**
-   * Hide the last opened tooltip.
+   * Hide all opened tooltips.
    */
   hide(): void;
 }
