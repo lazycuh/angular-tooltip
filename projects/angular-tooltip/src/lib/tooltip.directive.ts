@@ -68,8 +68,14 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
 
     this._hideTooltip(event);
 
+    const tooltipAnchor = event.target as Element;
+
+    if ((tooltipAnchor instanceof HTMLButtonElement && tooltipAnchor.disabled) || this._content === '') {
+      return;
+    }
+
     this._timeoutId = window.setTimeout(() => {
-      this._tooltipService.show(event.target as Element, {
+      this._tooltipService.show(tooltipAnchor, {
         content: this._content,
         placement: this._placement as Placement,
         theme: this._theme as Theme

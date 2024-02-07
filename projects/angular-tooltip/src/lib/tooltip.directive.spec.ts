@@ -15,7 +15,8 @@ import { TooltipDirective } from './tooltip.directive';
       type="button"
       [bbbTooltip]="content"
       [bbbTooltipPlacement]="placement"
-      [bbbTooltipTheme]="theme">
+      [bbbTooltipTheme]="theme"
+      [disabled]="disabled">
       Hover me
     </button>
   `
@@ -32,6 +33,10 @@ class TestBedComponent {
   @Input()
   // eslint-disable-next-line @stylistic/indent
   theme?: Theme;
+
+  @Input()
+  // eslint-disable-next-line @stylistic/indent
+  disabled?: boolean;
 
   @ViewChild('button', { read: ElementRef })
   readonly buttonRef!: ElementRef<HTMLButtonElement>;
@@ -163,6 +168,33 @@ describe(TooltipDirective.name, () => {
     await delayBy(1000);
 
     assertThat(classSelectorPrefix).doesNotExist();
+  });
+
+  it('Should not show tooltip when the anchor element is disabled', async () => {
+    testBedComponent.content = 'Hello TooltipDirective';
+    testBedComponent.disabled = true;
+
+    fixture.detectChanges();
+
+    testBedComponent.dispatchEvent('pointerover');
+    fixture.detectChanges();
+
+    await delayBy(500);
+
+    assertThat(`${classSelectorPrefix}__content`).doesNotExist();
+  });
+
+  it('Should not show tooltip when the tooltip content is empty', async () => {
+    testBedComponent.content = '';
+
+    fixture.detectChanges();
+
+    testBedComponent.dispatchEvent('pointerover');
+    fixture.detectChanges();
+
+    await delayBy(500);
+
+    assertThat(`${classSelectorPrefix}__content`).doesNotExist();
   });
 });
 
