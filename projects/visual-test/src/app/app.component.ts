@@ -1,9 +1,11 @@
 import { Component, TemplateRef } from '@angular/core';
-import { TooltipService } from 'projects/angular-tooltip/src/public-api';
+import { TooltipDirective, TooltipService } from 'projects/angular-tooltip/src/public-api';
 
 @Component({
-  selector: 'bbb-root',
-  styleUrls: ['./app.component.scss'],
+  imports: [TooltipDirective],
+  selector: 'lc-root',
+  standalone: true,
+  styleUrl: './app.component.scss',
   templateUrl: './app.component.html'
 })
 export class AppComponent {

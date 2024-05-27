@@ -12,9 +12,9 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 - [Tooltip placement](#tooltip-placement)
 - [Using `TooltipDirective`](#using-tooltipdirective)
   - [Supported input bindings](#supported-input-bindings)
-    - [`bbbTooltip`](#bbbtooltip)
-    - [`bbbTooltipPlacement`](#bbbtooltipplacement)
-    - [`bbbTooltipTheme`](#bbbtooltiptheme)
+    - [`lcTooltip`](#lctooltip)
+    - [`lcTooltipPlacement`](#lctooltipplacement)
+    - [`lcTooltipTheme`](#lctooltiptheme)
   - [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
   - [Result](#result)
 - [Using `TooltipService`](#using-tooltipservice)
@@ -34,7 +34,7 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 
 | This library | Angular |
 | ------------ | ------- |
-| 1.x.x        | 16 - 17 |
+| 1.x.x        | 16 - 18 |
 
 ## Installation
 
@@ -68,15 +68,15 @@ Because `TooltipDirective` is a standalone directive, you must import it into yo
 
 ### Supported input bindings
 
-#### `bbbTooltip`
+#### `lcTooltip`
 
 Sets the tooltip message to show.
 
-#### `bbbTooltipPlacement`
+#### `lcTooltipPlacement`
 
 Sets the position where the tooltip is placed. Valid values are `vertical` and `horizontal`. `vertical` is the default if not specified.
 
-#### `bbbTooltipTheme`
+#### `lcTooltipTheme`
 
 Sets the theme. Must be either `dark` or `light`. `dark` is the default if not provided.
 
@@ -89,11 +89,11 @@ Sets the theme. Must be either `dark` or `light`. `dark` is the default if not p
   standalone: true,
   template: `
         <button
-            bbbTooltip='Hello World'
-            <!-- if "bbbTooltipPlacement" is not specified, "vertical" is assumed -->
-            bbbTooltipPlacement='vertical'
-            <!-- if "bbbTooltipTheme" is not specified, "dark" is assumed -->
-            bbbTooltipTheme='dark'>
+            lcTooltip='Hello World'
+            <!-- if "lcTooltipPlacement" is not specified, "vertical" is assumed -->
+            lcTooltipPlacement='vertical'
+            <!-- if "lcTooltipTheme" is not specified, "dark" is assumed -->
+            lcTooltipTheme='dark'>
             Hover me
         </button>
     `

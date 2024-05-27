@@ -1,6 +1,6 @@
 $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
 
-.bbb-tooltip-container {
+.lc-tooltip-container {
     position: fixed;
     display: block;
     top: 0;
@@ -11,7 +11,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     pointer-events: none !important;
 }
 
-.bbb-tooltip {
+.lc-tooltip {
     position: absolute;
     border-radius: 5px;
     animation-duration: 0.3s;
@@ -72,7 +72,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     }
 }
 
-.bbb-tooltip__arrow {
+.lc-tooltip__arrow {
     overflow: hidden;
     position: absolute;
     width: 20px;
@@ -92,7 +92,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     }
 }
 
-.bbb-tooltip__content {
+.lc-tooltip__content {
     padding: 10px 8px;
     font-family: inherit;
     color: var(--tooltip-text-color);
@@ -105,7 +105,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     position: relative;
 }
 
-.bbb-tooltip.top .bbb-tooltip__arrow {
+.lc-tooltip.top .lc-tooltip__arrow {
     transform: translateX(-50%);
     top: 100%;
     left: 50%;
@@ -116,7 +116,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     }
 }
 
-.bbb-tooltip.bottom .bbb-tooltip__arrow {
+.lc-tooltip.bottom .lc-tooltip__arrow {
     transform: translateX(-50%);
     top: -20px;
     left: 50%;
@@ -127,7 +127,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     }
 }
 
-.bbb-tooltip.left .bbb-tooltip__arrow {
+.lc-tooltip.left .lc-tooltip__arrow {
     transform: translateY(-55%);
     top: 50%;
     left: 100%;
@@ -138,7 +138,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     }
 }
 
-.bbb-tooltip.right .bbb-tooltip__arrow {
+.lc-tooltip.right .lc-tooltip__arrow {
     transform: translateY(-55%) translateX(-20px);
     top: 50%;
     left: 0;

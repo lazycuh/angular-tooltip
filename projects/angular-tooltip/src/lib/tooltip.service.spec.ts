@@ -1,12 +1,12 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Component, provideExperimentalZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assertThat, delayBy } from '@babybeet/angular-testing-kit';
 
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
 
 @Component({
-  selector: 'bbb-test',
+  selector: 'lc-test',
   template: `
     <ng-container></ng-container>
     <ng-template
@@ -42,18 +42,17 @@ class TestBedComponent {
 }
 
 describe(TooltipService.name, () => {
-  const classSelectorPrefix = '.bbb-tooltip';
+  const classSelectorPrefix = '.lc-tooltip';
   let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
   let anchor: HTMLElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [TestBedComponent]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TestBedComponent],
+      providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestBedComponent);
     testBedComponent = fixture.componentInstance;
     fixture.detectChanges();
@@ -71,7 +70,7 @@ describe(TooltipService.name, () => {
       content: 'Hello World'
     });
 
-    fixture.detectChanges();
+    await delayBy(16);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
   });
@@ -84,15 +83,15 @@ describe(TooltipService.name, () => {
       }
     });
 
-    fixture.detectChanges();
+    await delayBy(16);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello TemplateRef');
   });
 
   it('Should render the provided component content correctly', async () => {
     @Component({
-      selector: 'bbb-content',
-      template: '<span>Hello @Component</span>'
+      selector: 'lc-content',
+      template: '<span>Hello {{"@"}}Component</span>'
     })
     class ContentComponent {}
 
@@ -100,7 +99,7 @@ describe(TooltipService.name, () => {
       content: ContentComponent
     });
 
-    fixture.detectChanges();
+    await delayBy(16);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello @Component');
   });
@@ -108,7 +107,7 @@ describe(TooltipService.name, () => {
   it('Should use light theme by default', async () => {
     testBedComponent.showTooltip(anchor);
 
-    fixture.detectChanges();
+    await delayBy(16);
 
     assertThat(`${classSelectorPrefix}.light`).exists();
     assertThat(`${classSelectorPrefix}.dark`).doesNotExist();
@@ -116,8 +115,6 @@ describe(TooltipService.name, () => {
 
   it('Should be able to configure a different default theme', async () => {
     testBedComponent.showTooltip(anchor);
-
-    fixture.detectChanges();
 
     await delayBy(1000);
 
@@ -131,8 +128,6 @@ describe(TooltipService.name, () => {
     TooltipService.setDefaultTheme('dark');
 
     testBedComponent.showTooltip(anchor);
-
-    fixture.detectChanges();
 
     await delayBy(1000);
 
@@ -148,33 +143,33 @@ describe(TooltipService.name, () => {
       theme: 'dark'
     });
 
-    fixture.detectChanges();
+    await delayBy(500);
 
     assertThat(`${classSelectorPrefix}.light`).doesNotExist();
     assertThat(`${classSelectorPrefix}.dark`).exists();
   });
 
-  it('Should add the provided class name', () => {
+  it('Should add the provided class name', async () => {
     testBedComponent.showTooltip(anchor, { className: 'hello-world' });
 
-    fixture.detectChanges();
+    await delayBy(500);
 
     assertThat(`${classSelectorPrefix}.hello-world`).exists();
   });
 
-  it('Should be able to configure the placement', () => {
+  it('Should be able to configure the placement', async () => {
     testBedComponent.showTooltip(anchor, { placement: 'horizontal' });
 
-    fixture.detectChanges();
+    await delayBy(500);
 
     assertThat(`${classSelectorPrefix}.bottom`).doesNotExist();
     assertThat(`${classSelectorPrefix}.right`).exists();
   });
 
-  it('#showAt() should show tooltip', () => {
+  it('#showAt() should show tooltip', async () => {
     testBedComponent.showTooltipAt(0, 0, { content: 'Hello World' });
 
-    fixture.detectChanges();
+    await delayBy(500);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
   });

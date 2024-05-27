@@ -51,10 +51,6 @@ export class TooltipService {
 
     const createdContent = this._createContent(configuration);
 
-    this._applicationRef.attachView(tooltipRef.hostView);
-
-    tooltipRef.changeDetectorRef.detectChanges();
-
     if (configuration.className) {
       tooltipRef.instance.addClassName(configuration.className);
     }
@@ -70,6 +66,10 @@ export class TooltipService {
       tooltipRef.destroy();
       createdContent.ref?.destroy();
     });
+
+    this._applicationRef.attachView(tooltipRef.hostView);
+
+    tooltipRef.changeDetectorRef.detectChanges();
 
     document.body.appendChild(tooltipRef.location.nativeElement);
 
