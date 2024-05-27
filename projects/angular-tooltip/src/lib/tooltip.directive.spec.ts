@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Component, ElementRef, Input, provideExperimentalZonelessChangeDetection, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assertThat, delayBy, fireEvent } from '@babybeet/angular-testing-kit';
 
 import { Placement } from './placement';
@@ -8,15 +8,14 @@ import { TooltipDirective } from './tooltip.directive';
 
 @Component({
   imports: [TooltipDirective],
-  selector: 'bbb-test',
+  selector: 'lc-test',
   template: `
     <button
       #button
       type="button"
-      [bbbTooltip]="content"
-      [bbbTooltipPlacement]="placement"
-      [bbbTooltipTheme]="theme"
-      [disabled]="disabled">
+      [lcTooltip]="content"
+      [lcTooltipPlacement]="placement"
+      [lcTooltipTheme]="theme">
       Hover me
     </button>
   `
@@ -50,18 +49,17 @@ class TestBedComponent {
 }
 
 describe(TooltipDirective.name, () => {
-  const classSelectorPrefix = '.bbb-tooltip';
+  const classSelectorPrefix = '.lc-tooltip';
   let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [TestBedComponent],
-      imports: [TooltipDirective]
+      imports: [TooltipDirective],
+      providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestBedComponent);
     testBedComponent = fixture.componentInstance;
     fixture.detectChanges();
@@ -73,10 +71,7 @@ describe(TooltipDirective.name, () => {
 
   it('Should render the provided content properly', async () => {
     testBedComponent.content = 'Hello TooltipDirective';
-    fixture.detectChanges();
-
     testBedComponent.dispatchEvent('pointerover');
-    fixture.detectChanges();
 
     await delayBy(500);
 
@@ -85,10 +80,7 @@ describe(TooltipDirective.name, () => {
 
   it('Should render with the provided placement properly', async () => {
     testBedComponent.placement = 'horizontal';
-    fixture.detectChanges();
-
     testBedComponent.dispatchEvent('pointerover');
-    fixture.detectChanges();
 
     await delayBy(500);
 
@@ -98,12 +90,9 @@ describe(TooltipDirective.name, () => {
 
   it('Should render with the provided theme properly', async () => {
     testBedComponent.theme = 'dark';
-    fixture.detectChanges();
-
     testBedComponent.dispatchEvent('pointerover');
-    fixture.detectChanges();
 
-    await delayBy(500);
+    await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}.light`).doesNotExist();
     assertThat(`${classSelectorPrefix}.dark`).exists();
@@ -111,8 +100,6 @@ describe(TooltipDirective.name, () => {
 
   it('Should show tooltip on pointerover', async () => {
     testBedComponent.dispatchEvent('pointerover');
-
-    fixture.detectChanges();
 
     await delayBy(500);
 
@@ -124,15 +111,11 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    fixture.detectChanges();
-
     await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 
     testBedComponent.dispatchEvent('pointerout');
-
-    fixture.detectChanges();
 
     await delayBy(1000);
 
@@ -141,10 +124,7 @@ describe(TooltipDirective.name, () => {
 
   it('Should show tooltip when the target element has keyboard focus', async () => {
     testBedComponent.buttonRef.nativeElement.focus();
-    fixture.detectChanges();
-
     testBedComponent.dispatchEvent('keyup');
-    fixture.detectChanges();
 
     await delayBy(500);
 
@@ -153,17 +133,13 @@ describe(TooltipDirective.name, () => {
 
   it('Should hide tooltip when the target element loses keyboard focus', async () => {
     testBedComponent.buttonRef.nativeElement.focus();
-    fixture.detectChanges();
-
     testBedComponent.dispatchEvent('keyup');
-    fixture.detectChanges();
 
     await delayBy(1000);
 
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 
     testBedComponent.buttonRef.nativeElement.blur();
-    fixture.detectChanges();
 
     await delayBy(1000);
 
@@ -199,19 +175,19 @@ describe(TooltipDirective.name, () => {
 });
 
 describe(`${TooltipDirective.name} on mobile`, () => {
-  const classSelectorPrefix = '.bbb-tooltip';
+  const classSelectorPrefix = '.lc-tooltip';
   let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [TestBedComponent],
-      imports: [TooltipDirective]
+      imports: [TooltipDirective],
+      providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     spyOnProperty(window.navigator, 'userAgent').and.returnValue('Android');
+
     fixture = TestBed.createComponent(TestBedComponent);
     testBedComponent = fixture.componentInstance;
     fixture.detectChanges();
@@ -223,7 +199,6 @@ describe(`${TooltipDirective.name} on mobile`, () => {
 
   it('Should show tooltip on long presses on mobile only', async () => {
     testBedComponent.dispatchEvent('pointerdown');
-    fixture.detectChanges();
 
     await delayBy(1500);
 
@@ -237,12 +212,10 @@ describe(`${TooltipDirective.name} on mobile`, () => {
 
   it('Should not show tooltip when clicking on the tooltip trigger after hovering it', async () => {
     testBedComponent.dispatchEvent('pointerover');
-    fixture.detectChanges();
 
     await delayBy(500);
 
     testBedComponent.dispatchEvent('click');
-    fixture.detectChanges();
 
     await delayBy(1000);
 

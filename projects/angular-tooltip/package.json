@@ -24,8 +24,8 @@
     "popup service"
   ],
   "peerDependencies": {
-    "@angular/common": "16 - 17",
-    "@angular/core": "16 - 17"
+    "@angular/common": "16 - 18",
+    "@angular/core": "16 - 18"
   },
   "repository": {
     "type": "git",

@@ -1,20 +1,29 @@
-import { AfterViewInit, Component, ElementRef, Host, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Host,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   // eslint-disable-next-line @angular-eslint/no-host-metadata-property
   host: {
-    class: 'bbb-tooltip-container'
+    class: 'lc-tooltip-container'
   },
-  selector: 'bbb-tooltip',
+  selector: 'lc-tooltip',
   standalone: true,
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html'
 })
-export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TooltipComponent implements OnInit, OnDestroy {
   protected _content = '';
   protected _placement?: Placement;
   protected _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
@@ -57,10 +66,6 @@ export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
-    this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
-  }
-
   hide() {
     this._isVisible = false;
     this._tooltip.classList.remove('enter');
@@ -101,7 +106,8 @@ export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element) {
-    this._tooltip.querySelector('.bbb-tooltip__content')?.appendChild(content);
+    this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
+    this._tooltip.querySelector('.lc-tooltip__content')?.appendChild(content);
 
     switch (this._placement) {
       case 'vertical':
@@ -184,7 +190,7 @@ export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
     const difference = left + width - window.innerWidth + spacing;
 
     if (difference > spacing) {
-      (this._tooltip.querySelector('.bbb-tooltip__arrow') as HTMLElement).style.left = `calc(50% + ${difference}px)`;
+      (this._tooltip.querySelector('.lc-tooltip__arrow') as HTMLElement).style.left = `calc(50% + ${difference}px)`;
 
       return difference;
     }
@@ -201,7 +207,7 @@ export class TooltipComponent implements OnInit, AfterViewInit, OnDestroy {
       const spacing = 5;
       const newLeft = `calc(50% - ${Math.abs(left) + spacing}px)`;
 
-      (this._tooltip.querySelector('.bbb-tooltip__arrow') as HTMLElement).style.left = newLeft;
+      (this._tooltip.querySelector('.lc-tooltip__arrow') as HTMLElement).style.left = newLeft;
 
       return left - spacing;
     }

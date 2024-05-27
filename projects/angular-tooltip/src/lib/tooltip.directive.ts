@@ -18,19 +18,19 @@ import { TooltipService } from './tooltip.service';
 import { isMobile, watchForLongPress } from './utils';
 
 @Directive({
-  selector: '[bbbTooltip]',
+  selector: '[lcTooltip]',
   standalone: true
 })
 export class TooltipDirective implements OnDestroy, AfterViewInit {
-  @Input('bbbTooltip')
+  @Input('lcTooltip')
   _content = '';
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input('bbbTooltipPlacement')
+  @Input('lcTooltipPlacement')
   _placement?: 'vertical' | 'horizontal' | Placement;
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input('bbbTooltipTheme')
+  @Input('lcTooltipTheme')
   _theme: Theme = 'light';
 
   private _longPressEventSubscription?: Subscription;
