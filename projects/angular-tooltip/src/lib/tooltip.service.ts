@@ -52,7 +52,7 @@ export class TooltipService {
     const createdContent = this._createContent(configuration);
 
     if (configuration.className) {
-      tooltipRef.instance.addClassName(configuration.className);
+      tooltipRef.instance.setClassName(configuration.className);
     }
 
     if (configuration.placement) {

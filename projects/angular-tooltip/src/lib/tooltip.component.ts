@@ -4,7 +4,7 @@ import {
   ElementRef,
   Host,
   OnDestroy,
-  OnInit,
+  signal,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -23,24 +23,23 @@ import { Theme } from './theme';
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html'
 })
-export class TooltipComponent implements OnInit, OnDestroy {
-  protected _content = '';
-  protected _placement?: Placement;
+export class TooltipComponent implements OnDestroy {
+  protected readonly _content = signal('');
   protected _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
     .substring(5, 15)
     .toLowerCase()}__`;
 
   /**
    * Optional class to add to this component
-   *
-   * @private To be used by template
    */
-  protected _className?: string;
+  protected readonly _className = signal<string | undefined>(undefined);
 
   /**
    * The current theme for this tooltip.
    */
-  protected _theme?: Theme;
+  protected readonly _theme = signal<Theme>('light');
+
+  private _placement: Placement = 'vertical';
 
   /**
    * The DOM element representing this tooltip
@@ -56,16 +55,6 @@ export class TooltipComponent implements OnInit, OnDestroy {
 
   constructor(@Host() private readonly _host: ElementRef<HTMLElement>) {}
 
-  ngOnInit(): void {
-    if (this._placement === undefined) {
-      this._placement = 'vertical';
-    }
-
-    if (this._theme === undefined) {
-      this._theme = 'light';
-    }
-  }
-
   hide() {
     this._isVisible = false;
     this._tooltip.classList.remove('enter');
@@ -76,12 +65,12 @@ export class TooltipComponent implements OnInit, OnDestroy {
     this._afterClosedListener = undefined;
   }
 
-  addClassName(className: string) {
-    this._className = className;
+  setClassName(className: string) {
+    this._className.set(className);
   }
 
   setTheme(theme: Theme) {
-    this._theme = theme;
+    this._theme.set(theme);
   }
 
   setAfterClosedListener(listener: () => void) {
