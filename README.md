@@ -11,22 +11,22 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 - [Accessibility](#accessibility)
 - [Tooltip placement](#tooltip-placement)
 - [Using `TooltipDirective`](#using-tooltipdirective)
-  - [Supported input bindings](#supported-input-bindings)
-    - [`lcTooltip`](#lctooltip)
-    - [`lcTooltipPlacement`](#lctooltipplacement)
-    - [`lcTooltipTheme`](#lctooltiptheme)
-  - [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
-  - [Result](#result)
+  * [Supported input bindings](#supported-input-bindings)
+    + [`lcTooltip`](#lctooltip)
+    + [`lcTooltipPlacement`](#lctooltipplacement)
+    + [`lcTooltipTheme`](#lctooltiptheme)
+  * [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
+  * [Result](#result)
 - [Using `TooltipService`](#using-tooltipservice)
-  - [`TooltipService`](#tooltipservice)
-  - [`TooltipConfiguration`](#tooltipconfiguration)
-  - [`Placement`](#placement)
-  - [`Theme`](#theme)
+  * [`TooltipService`](#tooltipservice)
+  * [`TooltipConfiguration`](#tooltipconfiguration)
+  * [`Placement`](#placement)
+  * [`Theme`](#theme)
 - [Example Usage](#example-usage)
-  - [Code example with a string content](#code-example-with-a-string-content)
-    - [Result](#result-1)
-  - [Code example with a `TemplateRef` content](#code-example-with-a-templateref-content)
-    - [Result](#result-2)
+  * [Code example with a string content](#code-example-with-a-string-content)
+    + [Result](#result-1)
+  * [Code example with a `TemplateRef` content](#code-example-with-a-templateref-content)
+    + [Result](#result-2)
 
 <!-- tocstop -->
 
@@ -58,7 +58,7 @@ The tooltip component that gets created handles wiring up `aria-describedby` att
 
 ## Tooltip placement
 
-There are 2 supported placement values: `vertical` and `horizontal`. `vertical` will either place the tooltip at the bottom or top of the anchor element depending on which side has enough space for the tooltip to not be cutoff. Similarly, `horizontal` will either place the tooltip at the right or left of the anchor element depending on which side has enough space for the tooltip to not be cutoff. By default, `vertical` is used and the tooltip is placed at the bottom of the anchor.
+There are 2 supported placement values: `vertical` and `horizontal`. `vertical` will either place the tooltip at the bottom or top of the anchor element depending on which side has enough space for the tooltip to not be cut off. Similarly, `horizontal` will either place the tooltip at the right or left of the anchor element depending on which side has enough space for the tooltip to not be cut off. By default, `vertical` is used and the tooltip is placed at the bottom of the anchor.
 
 ## Using `TooltipDirective`
 
@@ -136,12 +136,12 @@ On mobile devices, you can activate the tooltip by long-pressing the trigger ele
 
 ### `TooltipService`
 
-This class allows to programmatically show a tooltip anchored at an element. See {@see TooltipConfiguration} for the different options to configure the tooltip. Please note that even though this class can create as many tooltips as desired, it cannot selectively close a tooltip, it can only close all currently opened tooltips.
+This class allows to programmatically show a tooltip anchored at an element. See `TooltipConfiguration` for the different options to configure the tooltip. Please note that even though this class can create as many tooltips as desired, it cannot selectively close a tooltip, it can only close all currently opened tooltips.
 
 ```ts
-class TooltipService {
+export declare class TooltipService {
   /**
-   * Set the default theme that will be used for all tooltip created in the future.
+   * Set the default theme that will be used for all tooltips created in the future.
    *
    * @param theme The new theme to be used as the default.
    */
@@ -154,7 +154,6 @@ class TooltipService {
    * @param anchor The target at which to place the tooltip.
    * @param configuration The configuration object for this tooltip instance.
    */
-
   show(anchor: Element, configuration: TooltipConfiguration): void;
 
   /**
@@ -176,10 +175,13 @@ class TooltipService {
 
 ### `TooltipConfiguration`
 
-The configuration object for the current tooltip. The optional type parameter `C` describes the type of the optional context object passed to `TemplateRef<C>` content, otherwise, it's ignored for other types of content.
+The configuration object for the current tooltip.
 
 ```ts
-interface TooltipConfiguration<C extends Record<string, unknown> | unknown = unknown> {
+/**
+ * The configuration object for the current tooltip..
+ */
+export interface TooltipConfiguration {
   /**
    * The optional class name to add to this tooltip.
    */
@@ -187,11 +189,11 @@ interface TooltipConfiguration<C extends Record<string, unknown> | unknown = unk
   /**
    * The required content to show, it accepts a `TemplateRef`, a `@Component()` class, or a string.
    */
-  content: TemplateRef<C> | Type<unknown> | string;
+  content: TemplateRef<unknown> | Type<unknown> | string;
   /**
    * The optional context object that is referenced by the template ref.
    */
-  context?: C;
+  context?: unknown;
   /**
    * Where to position the tooltip. Default is `vertical`.
    */

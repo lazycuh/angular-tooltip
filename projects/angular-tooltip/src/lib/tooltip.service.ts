@@ -21,7 +21,7 @@ export class TooltipService {
   constructor(private readonly _applicationRef: ApplicationRef) {}
 
   /**
-   * Set the default theme that will be used for all tooltip created in the future.
+   * Set the default theme that will be used for all tooltips created in the future.
    *
    * @param theme The new theme to be used as the default.
    */
