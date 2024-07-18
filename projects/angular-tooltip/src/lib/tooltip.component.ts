@@ -14,7 +14,7 @@ import { Theme } from './theme';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+
   host: {
     class: 'lc-tooltip-container'
   },
@@ -87,14 +87,14 @@ export class TooltipComponent implements OnDestroy {
    * @param anchor The target at which to place this tooltip.
    * @param content The tooltip content to show.
    */
-  show(anchor: Element, content: Element) {
+  show(anchor: Element, content: Element | DocumentFragment) {
     if (document.body.contains(anchor)) {
       anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy);
       this._showTooltip(anchor.getBoundingClientRect(), content);
     }
   }
 
-  private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element) {
+  private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element | DocumentFragment) {
     this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
     this._tooltip.querySelector('.lc-tooltip__content')?.appendChild(content);
 
@@ -179,7 +179,7 @@ export class TooltipComponent implements OnDestroy {
     const difference = left + width - window.innerWidth + spacing;
 
     if (difference > spacing) {
-      (this._tooltip.querySelector('.lc-tooltip__arrow') as HTMLElement).style.left = `calc(50% + ${difference}px)`;
+      this._tooltip.querySelector<HTMLElement>('.lc-tooltip__arrow')!.style.left = `calc(50% + ${difference}px)`;
 
       return difference;
     }
@@ -196,7 +196,7 @@ export class TooltipComponent implements OnDestroy {
       const spacing = 5;
       const newLeft = `calc(50% - ${Math.abs(left) + spacing}px)`;
 
-      (this._tooltip.querySelector('.lc-tooltip__arrow') as HTMLElement).style.left = newLeft;
+      this._tooltip.querySelector<HTMLElement>('.lc-tooltip__arrow')!.style.left = newLeft;
 
       return left - spacing;
     }
@@ -277,7 +277,7 @@ export class TooltipComponent implements OnDestroy {
   /**
    * Show a tooltip at the specified x/y location.
    */
-  showAt(x: number, y: number, content: Element) {
+  showAt(x: number, y: number, content: Element | DocumentFragment) {
     const anchorBoundingBox: Omit<DOMRect, 'toJSON'> = {
       bottom: y + 1,
       height: 1,

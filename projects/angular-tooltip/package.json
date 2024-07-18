@@ -1,5 +1,5 @@
 {
-  "name": "@babybeet/angular-tooltip",
+  "name": "@lazycuh/angular-tooltip",
   "description": "Easily show tooltips programmatically and/or declaratively in Angular",
   "version": "1.1.1",
   "author": {
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/babybeet/angular-tooltip"
+    "url": "https://github.com/lazycuh/angular-tooltip"
   },
   "devDependencies": {
     "tslib": "^2.3.0"

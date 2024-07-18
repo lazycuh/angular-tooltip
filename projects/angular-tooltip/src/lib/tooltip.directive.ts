@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
@@ -77,8 +78,8 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
     this._timeoutId = window.setTimeout(() => {
       this._tooltipService.show(tooltipAnchor, {
         content: this._content,
-        placement: this._placement as Placement,
-        theme: this._theme as Theme
+        placement: this._placement!,
+        theme: this._theme
       });
     }, 500);
   }

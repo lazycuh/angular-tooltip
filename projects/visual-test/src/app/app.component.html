@@ -1,23 +1,23 @@
 <button
     #button
     type="button"
-    (pointerover)="onShowTooltip(button, templateRefContent)"
-    (pointerout)="onHideTooltip()">
+    (pointerout)="onHideTooltip()"
+    (pointerover)="onShowTooltip(button, templateRefContent)">
     Hover me (TooltipService)
 </button>
 
 &nbsp;
 <button
-    type="button"
-    lcTooltip="This is a tooltip">
+    lcTooltip="This is a tooltip"
+    type="button">
     Hover me (TooltipDirective)
 </button>
 &nbsp;
 
 <button
-    type="button"
     lcTooltip="Hello World"
-    lcTooltipTheme="dark">
+    lcTooltipTheme="dark"
+    type="button">
     Long-press to show tooltip
 </button>
 

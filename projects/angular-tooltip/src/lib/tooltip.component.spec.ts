@@ -1,7 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import { DebugElement, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { assertThat, delayBy } from '@babybeet/angular-testing-kit';
+import { assertThat, delayBy } from '@lazycuh/angular-testing-kit';
 
 import { TooltipComponent } from './tooltip.component';
 

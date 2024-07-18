@@ -1,14 +1,24 @@
-import { Component, ElementRef, provideExperimentalZonelessChangeDetection, signal, ViewChild } from '@angular/core';
+/* eslint-disable import/no-extraneous-dependencies */
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  provideExperimentalZonelessChangeDetection,
+  signal,
+  ViewChild
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { assertThat, delayBy, fireEvent } from '@babybeet/angular-testing-kit';
+import { assertThat, delayBy, fireEvent } from '@lazycuh/angular-testing-kit';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
 import { TooltipDirective } from './tooltip.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TooltipDirective],
   selector: 'lc-test',
+  standalone: true,
   template: `
     <button
       #button
@@ -45,8 +55,7 @@ describe(TooltipDirective.name, () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestBedComponent],
-      imports: [TooltipDirective],
+      imports: [TooltipDirective, TestBedComponent],
       providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
 
@@ -169,8 +178,7 @@ describe(`${TooltipDirective.name} on mobile`, () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestBedComponent],
-      imports: [TooltipDirective],
+      imports: [TooltipDirective, TestBedComponent],
       providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
 
@@ -195,7 +203,7 @@ describe(`${TooltipDirective.name} on mobile`, () => {
     fireEvent(window, 'pointerup');
     await delayBy(1000);
 
-    assertThat(`${classSelectorPrefix}`).doesNotExist();
+    assertThat(classSelectorPrefix).doesNotExist();
   });
 
   it('Should not show tooltip when clicking on the tooltip trigger after hovering it', async () => {

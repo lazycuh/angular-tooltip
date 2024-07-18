@@ -1,14 +1,23 @@
-import { Component, provideExperimentalZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
+/* eslint-disable import/no-extraneous-dependencies */
+import {
+  ChangeDetectionStrategy,
+  Component,
+  provideExperimentalZonelessChangeDetection,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { assertThat, delayBy } from '@babybeet/angular-testing-kit';
+import { assertThat, delayBy } from '@lazycuh/angular-testing-kit';
 
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'lc-test',
+  standalone: true,
   template: `
-    <ng-container></ng-container>
+    <ng-container />
     <ng-template
       #templateRefContent
       let-name>
@@ -49,7 +58,7 @@ describe(TooltipService.name, () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestBedComponent],
+      imports: [TestBedComponent],
       providers: [provideExperimentalZonelessChangeDetection()]
     }).compileComponents();
 
@@ -90,7 +99,9 @@ describe(TooltipService.name, () => {
 
   it('Should render the provided component content correctly', async () => {
     @Component({
+      changeDetection: ChangeDetectionStrategy.OnPush,
       selector: 'lc-content',
+      standalone: true,
       template: '<span>Hello {{"@"}}Component</span>'
     })
     class ContentComponent {}

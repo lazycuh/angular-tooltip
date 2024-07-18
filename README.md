@@ -1,4 +1,4 @@
-# angular-tooltip [![](https://circleci.com/gh/babybeet/angular-tooltip.svg?style=svg&logo=appveyor)](https://app.circleci.com/pipelines/github/babybeet/angular-tooltip?branch=main)
+# angular-tooltip [![](https://circleci.com/gh/lazycuh/angular-tooltip.svg?style=svg&logo=appveyor)](https://app.circleci.com/pipelines/github/lazycuh/angular-tooltip?branch=main)
 
 Easily show tooltips programmatically and/or declaratively in Angular.
 
@@ -40,16 +40,16 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 
 - `npm`
   ```
-  npm i -S @babybeet/angular-tooltip
+  npm i -S @lazycuh/angular-tooltip
   ```
 - `pnpm`
   ```
-  pnpm i -S @babybeet/angular-tooltip
+  pnpm i -S @lazycuh/angular-tooltip
   ```
 - `yarn`
 
   ```
-  yarn add @babybeet/angular-tooltip
+  yarn add @lazycuh/angular-tooltip
   ```
 
 ## Accessibility
@@ -238,7 +238,7 @@ type Theme = 'light' | 'dark';
 
 ```ts
 // Import the service into your class to start using it
-import { TooltipService, Placement, Theme } from '@babybeet/angular-tooltip';
+import { TooltipService, Placement, Theme } from '@lazycuh/angular-tooltip';
 
 @Component({
   selector: 'test-component',
@@ -280,7 +280,7 @@ export class TestComponent {
 
 ```ts
 // Import the service into your class to start using it
-import { TooltipService, Placement, Theme } from '@babybeet/angular-tooltip';
+import { TooltipService, Placement, Theme } from '@lazycuh/angular-tooltip';
 
 @Component({
   selector: 'test-component',

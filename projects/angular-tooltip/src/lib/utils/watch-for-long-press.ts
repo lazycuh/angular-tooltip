@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -6,7 +7,9 @@ export function watchForLongPress(target: HTMLElement) {
   const notifier = new Subject<PointerEvent>();
 
   const pointerdown = (event: PointerEvent) => {
-    timeoutId = window.setTimeout(() => notifier.next(event), 500);
+    timeoutId = window.setTimeout(() => {
+      notifier.next(event);
+    }, 500);
   };
 
   const pointerup = () => {

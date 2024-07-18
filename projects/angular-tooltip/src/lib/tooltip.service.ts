@@ -59,7 +59,7 @@ export class TooltipService {
       tooltipRef.instance.setPlacement(configuration.placement);
     }
 
-    tooltipRef.instance.setTheme(configuration.theme || TooltipService._defaultTheme);
+    tooltipRef.instance.setTheme(configuration.theme ?? TooltipService._defaultTheme);
 
     tooltipRef.instance.setAfterClosedListener(() => {
       this._applicationRef.detachView(tooltipRef.hostView);
@@ -102,7 +102,7 @@ export class TooltipService {
          * a containing DOM element, then there will be multiple root nodes, in this case,
          * we want to add them all as the content by appending them to a document fragment
          */
-        rootNode: embeddedView.rootNodes.reduce((contentRoot: Element, next) => {
+        rootNode: (embeddedView.rootNodes as Element[]).reduce((contentRoot, next) => {
           contentRoot.appendChild(next);
 
           return contentRoot;
