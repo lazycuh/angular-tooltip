@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,

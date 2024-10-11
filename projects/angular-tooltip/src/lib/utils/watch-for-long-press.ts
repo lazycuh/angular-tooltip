@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 

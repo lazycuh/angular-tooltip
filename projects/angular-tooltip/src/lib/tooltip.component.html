@@ -1,6 +1,9 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <div
     class="lc-tooltip {{ _theme() }}{{ _className() ? ' ' + _className() : '' }}"
-    (animationend)="_onAnimationDone()">
+    (animationend)="_onAnimationDone()"
+    (click)="_onPreventClickBubbling($event)">
     <div class="lc-tooltip__arrow"></div>
     <div
         class="lc-tooltip__content"

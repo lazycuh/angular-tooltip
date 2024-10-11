@@ -11,22 +11,22 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 - [Accessibility](#accessibility)
 - [Tooltip placement](#tooltip-placement)
 - [Using `TooltipDirective`](#using-tooltipdirective)
-  * [Supported input bindings](#supported-input-bindings)
-    + [`lcTooltip`](#lctooltip)
-    + [`lcTooltipPlacement`](#lctooltipplacement)
-    + [`lcTooltipTheme`](#lctooltiptheme)
-  * [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
-  * [Result](#result)
+  - [Supported input bindings](#supported-input-bindings)
+    - [`lcTooltip`](#lctooltip)
+    - [`lcTooltipPlacement`](#lctooltipplacement)
+    - [`lcTooltipTheme`](#lctooltiptheme)
+  - [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
+  - [Result](#result)
 - [Using `TooltipService`](#using-tooltipservice)
-  * [`TooltipService`](#tooltipservice)
-  * [`TooltipConfiguration`](#tooltipconfiguration)
-  * [`Placement`](#placement)
-  * [`Theme`](#theme)
+  - [`TooltipService`](#tooltipservice)
+  - [`TooltipConfiguration`](#tooltipconfiguration)
+  - [`Placement`](#placement)
+  - [`Theme`](#theme)
 - [Example Usage](#example-usage)
-  * [Code example with a string content](#code-example-with-a-string-content)
-    + [Result](#result-1)
-  * [Code example with a `TemplateRef` content](#code-example-with-a-templateref-content)
-    + [Result](#result-2)
+  - [Code example with a string content](#code-example-with-a-string-content)
+    - [Result](#result-1)
+  - [Code example with a `TemplateRef` content](#code-example-with-a-templateref-content)
+    - [Result](#result-2)
 
 <!-- tocstop -->
 
@@ -212,16 +212,17 @@ Describes the direction in which the tooltip is placed with respect to its ancho
 ```ts
 type Placement =
   /**
-   * The tooltip will be placed either at the bottom or at the top with respect to its anchor
+   * The tooltip will be placed either at the left or at the right with respect to its anchor
    * depending on how much available space there is in that direction. By default,
-   * the tooltip will be placed at the bottom of its anchor for this placement.
+   * the tooltip will be placed at the right of its anchor for this placement.
    */
   | 'horizontal'
 
   /**
-   * The tooltip will be placed either at the left or at the right with respect to its anchor
+   * The tooltip will be placed either at the bottom or at the top with respect to its anchor
    * depending on how much available space there is in that direction. By default,
-   * the tooltip will be placed at the right of its anchor for this placement.
+   * the tooltip will be placed at the bottom of its anchor for this placement.
+   * This is the default placement if not specified
    */
   | 'vertical';
 ```

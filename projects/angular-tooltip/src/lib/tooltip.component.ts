@@ -25,7 +25,7 @@ import { Theme } from './theme';
 })
 export class TooltipComponent implements OnDestroy {
   protected readonly _content = signal('');
-  protected _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
+  protected readonly _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
     .substring(5, 15)
     .toLowerCase()}__`;
 
@@ -266,15 +266,6 @@ export class TooltipComponent implements OnDestroy {
   }
 
   /**
-   * @private To be used by template
-   */
-  _onAnimationDone() {
-    if (!this._isVisible && this._afterClosedListener) {
-      this._afterClosedListener();
-    }
-  }
-
-  /**
    * Show a tooltip at the specified x/y location.
    */
   showAt(x: number, y: number, content: Element | DocumentFragment) {
@@ -290,5 +281,18 @@ export class TooltipComponent implements OnDestroy {
     };
 
     this._showTooltip(anchorBoundingBox, content);
+  }
+
+  protected _onPreventClickBubbling(event: MouseEvent) {
+    event.stopPropagation();
+  }
+
+  /**
+   * @private To be used by template
+   */
+  protected _onAnimationDone() {
+    if (!this._isVisible && this._afterClosedListener) {
+      this._afterClosedListener();
+    }
   }
 }
