@@ -103,6 +103,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     height: 100%;
     overflow-y: auto;
     position: relative;
+    word-wrap: break-word;
 }
 
 .lc-tooltip.top .lc-tooltip__arrow {
