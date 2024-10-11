@@ -17,7 +17,8 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
     animation-duration: 0.3s;
     animation-timing-function: $easing-function;
     animation-fill-mode: forwards;
-    max-width: 98vw;
+    max-width: 400px;
+    box-sizing: border-box;
     max-height: 98vw;
     background-color: var(--tooltip-bg-color);
     box-shadow: var(--tooltip-shadow);
@@ -93,7 +94,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
 }
 
 .lc-tooltip__content {
-    padding: 10px 8px;
+    padding: 8px 12px;
     font-family: inherit;
     color: var(--tooltip-text-color);
     white-space: pre-wrap;
