@@ -62,6 +62,7 @@ export class TooltipService {
     tooltipRef.instance.setTheme(configuration.theme ?? TooltipService._defaultTheme);
 
     tooltipRef.instance.setAfterClosedListener(() => {
+      document.body.removeChild(tooltipRef.location.nativeElement);
       this._applicationRef.detachView(tooltipRef.hostView);
       tooltipRef.destroy();
       createdContent.ref?.destroy();
