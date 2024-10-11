@@ -1,4 +1,4 @@
-import { ApplicationRef, createComponent, Injectable, TemplateRef } from '@angular/core';
+import { ApplicationRef, ComponentRef, createComponent, EmbeddedViewRef, Injectable, TemplateRef } from '@angular/core';
 
 import { Theme } from './theme';
 import { TooltipComponent } from './tooltip.component';
@@ -39,7 +39,7 @@ export class TooltipService {
   show(anchor: Element, configuration: TooltipConfiguration) {
     const result = this._prepareTooltip(configuration);
 
-    result.tooltipRef.instance.show(anchor, result.content.rootNode);
+    result.tooltipRef.instance.show(anchor, result.content.content);
 
     this._openedTooltips.add(result.tooltipRef.instance);
   }
@@ -70,7 +70,16 @@ export class TooltipService {
 
     this._applicationRef.attachView(tooltipRef.hostView);
 
+    /*
+     * For some reason, `changeDetectorRef.detectChanges()` removes some nodes from
+     * `createdContent.rootNode` when `createdContent.rootNode` has more than
+     * 1 child node, so we have to do this to work around that.
+     */
+    const rootNode = createdContent.content.cloneNode(true);
+
     tooltipRef.changeDetectorRef.detectChanges();
+
+    createdContent.content = rootNode;
 
     document.body.appendChild(tooltipRef.location.nativeElement);
 
@@ -80,14 +89,14 @@ export class TooltipService {
     };
   }
 
-  private _createContent(configuration: TooltipConfiguration) {
+  private _createContent(configuration: TooltipConfiguration): {
+    content: Node;
+    ref: null | ComponentRef<unknown> | EmbeddedViewRef<unknown>;
+  } {
     if (typeof configuration.content === 'string') {
-      const contentRoot: Element = document.createElement('div');
-      contentRoot.innerHTML = configuration.content;
-
       return {
-        ref: null,
-        rootNode: contentRoot
+        content: document.createTextNode(configuration.content),
+        ref: null
       };
     }
 
@@ -97,17 +106,18 @@ export class TooltipService {
       this._applicationRef.attachView(embeddedView);
 
       return {
-        ref: embeddedView,
         /**
          * If the markups inside the provided template ref aren't being wrapped inside
          * a containing DOM element, then there will be multiple root nodes, in this case,
          * we want to add them all as the content by appending them to a document fragment
          */
-        rootNode: (embeddedView.rootNodes as Element[]).reduce((contentRoot, next) => {
+        content: (embeddedView.rootNodes as Element[]).reduce((contentRoot, next) => {
           contentRoot.appendChild(next);
 
           return contentRoot;
-        }, document.createDocumentFragment())
+        }, document.createDocumentFragment()),
+
+        ref: embeddedView
       };
     }
 
@@ -116,8 +126,8 @@ export class TooltipService {
     this._applicationRef.attachView(componentRef.hostView);
 
     return {
-      ref: componentRef,
-      rootNode: componentRef.location.nativeElement as Element
+      content: componentRef.location.nativeElement as Element,
+      ref: componentRef
     };
   }
 
@@ -132,7 +142,7 @@ export class TooltipService {
   showAt(x: number, y: number, configuration: TooltipConfiguration) {
     const result = this._prepareTooltip(configuration);
 
-    result.tooltipRef.instance.showAt(x, y, result.content.rootNode);
+    result.tooltipRef.instance.showAt(x, y, result.content.content);
 
     this._openedTooltips.add(result.tooltipRef.instance);
   }

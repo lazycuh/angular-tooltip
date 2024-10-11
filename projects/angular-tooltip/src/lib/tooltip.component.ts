@@ -87,14 +87,14 @@ export class TooltipComponent implements OnDestroy {
    * @param anchor The target at which to place this tooltip.
    * @param content The tooltip content to show.
    */
-  show(anchor: Element, content: Element | DocumentFragment) {
+  show(anchor: Element, content: Node) {
     if (document.body.contains(anchor)) {
       anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy);
       this._showTooltip(anchor.getBoundingClientRect(), content);
     }
   }
 
-  private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Element | DocumentFragment) {
+  private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Node) {
     this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
     this._tooltip.querySelector('.lc-tooltip__content')?.appendChild(content);
 
@@ -268,7 +268,7 @@ export class TooltipComponent implements OnDestroy {
   /**
    * Show a tooltip at the specified x/y location.
    */
-  showAt(x: number, y: number, content: Element | DocumentFragment) {
+  showAt(x: number, y: number, content: Node) {
     const anchorBoundingBox: Omit<DOMRect, 'toJSON'> = {
       bottom: y + 1,
       height: 1,

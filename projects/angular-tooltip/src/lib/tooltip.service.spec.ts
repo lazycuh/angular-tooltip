@@ -3,7 +3,7 @@ import {
   Component,
   provideExperimentalZonelessChangeDetection,
   TemplateRef,
-  ViewChild
+  viewChild
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { assertThat, delayBy } from '@lazycuh/angular-testing-kit';
@@ -20,13 +20,12 @@ import { TooltipConfiguration } from './tooltip-configuration';
     <ng-template
       #templateRefContent
       let-name>
-      <strong>Hello {{ name }}</strong>
+      <strong>Hello TemplateRef</strong>
     </ng-template>
   `
 })
 class TestBedComponent {
-  @ViewChild('templateRefContent', { read: TemplateRef })
-  readonly templateRefContent!: TemplateRef<unknown>;
+  readonly templateRefContent = viewChild.required('templateRefContent', { read: TemplateRef });
 
   constructor(private readonly _service: TooltipService) {}
 
@@ -85,7 +84,7 @@ describe(TooltipService.name, () => {
 
   it('Should render the provided template ref content correctly', async () => {
     testBedComponent.showTooltip(anchor, {
-      content: testBedComponent.templateRefContent,
+      content: testBedComponent.templateRefContent(),
       context: {
         $implicit: 'TemplateRef'
       }
@@ -101,7 +100,7 @@ describe(TooltipService.name, () => {
       changeDetection: ChangeDetectionStrategy.OnPush,
       selector: 'lc-content',
       standalone: true,
-      template: '<span>Hello {{"@"}}Component</span>'
+      template: '<span>Hello &#64;Component</span>'
     })
     class ContentComponent {}
 

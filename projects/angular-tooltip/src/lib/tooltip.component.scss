@@ -13,7 +13,7 @@ $easing-function: cubic-bezier(0.04, 0.54, 0.25, 1);
 
 .lc-tooltip {
     position: absolute;
-    border-radius: 5px;
+    border-radius: 6px;
     animation-duration: 0.3s;
     animation-timing-function: $easing-function;
     animation-fill-mode: forwards;
