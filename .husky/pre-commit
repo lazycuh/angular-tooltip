@@ -8,7 +8,7 @@ then
     exit 1
 fi
 
-pnpm check-code-styles --write
+pnpm check-code-styles
 pnpm update-toc
-git add .
+git add README.md
 pnpm lint-staged
