@@ -200,7 +200,7 @@ describe(`${TooltipDirective.name} on mobile`, () => {
     assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
 
     fireEvent(window, 'pointerup');
-    await delayBy(1000);
+    await delayBy(500);
 
     assertThat(classSelectorPrefix).doesNotExist();
   });

@@ -20,7 +20,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
     <ng-template
       #templateRefContent
       let-name>
-      <strong>Hello TemplateRef</strong>
+      <strong>Hello {{ name }}</strong>
     </ng-template>
   `
 })
@@ -100,7 +100,7 @@ describe(TooltipService.name, () => {
       changeDetection: ChangeDetectionStrategy.OnPush,
       selector: 'lc-content',
       standalone: true,
-      template: '<span>Hello &#64;Component</span>'
+      template: '<span>Hello {{"@"}}Component</span>'
     })
     class ContentComponent {}
 

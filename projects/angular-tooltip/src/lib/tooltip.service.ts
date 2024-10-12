@@ -70,16 +70,7 @@ export class TooltipService {
 
     this._applicationRef.attachView(tooltipRef.hostView);
 
-    /*
-     * For some reason, `changeDetectorRef.detectChanges()` removes some nodes from
-     * `createdContent.rootNode` when `createdContent.rootNode` has more than
-     * 1 child node, so we have to do this to work around that.
-     */
-    const rootNode = createdContent.content.cloneNode(true);
-
     tooltipRef.changeDetectorRef.detectChanges();
-
-    createdContent.content = rootNode;
 
     document.body.appendChild(tooltipRef.location.nativeElement);
 
@@ -104,6 +95,8 @@ export class TooltipService {
       const embeddedView = configuration.content.createEmbeddedView(configuration.context || {});
 
       this._applicationRef.attachView(embeddedView);
+
+      embeddedView.detectChanges();
 
       return {
         /**
