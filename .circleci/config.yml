@@ -15,20 +15,6 @@ install-pnpm: &install-pnpm
     corepack prepare pnpm@latest-8 --activate
 
 jobs:
-  versioning:
-    docker:
-      - image: << pipeline.parameters.node-image >>
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - '$GH_KEY'
-      - run:
-          name: Bumping version for release
-          command: |
-            chmod +x .circleci/scripts/versioning.sh
-            .circleci/scripts/versioning.sh
-
   installation:
     docker:
       - image: << pipeline.parameters.node-image >>
@@ -112,13 +98,24 @@ jobs:
             cd dist/*
             ../../.circleci/scripts/publish-to-npm-registry.sh
 
+  versioning:
+    docker:
+      - image: << pipeline.parameters.node-image >>
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - '$GH_KEY'
+      - run:
+          name: Bumping version for release
+          command: |
+            chmod +x .circleci/scripts/versioning.sh
+            .circleci/scripts/versioning.sh
+
 workflows:
   deployment:
     jobs:
-      - versioning
-      - installation:
-          requires:
-            - versioning
+      - installation
       - linting:
           requires:
             - installation
@@ -138,3 +135,6 @@ workflows:
             - linting
             - unit-testing
             - building
+      - versioning:
+          requires:
+            - publish-to-npm-registry
