@@ -19,7 +19,6 @@ import { Theme } from './theme';
     class: 'lc-tooltip-container'
   },
   selector: 'lc-tooltip',
-  standalone: true,
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html'
 })

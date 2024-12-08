@@ -1,15 +1,16 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
-  AfterViewInit,
+  afterNextRender,
+  DestroyRef,
   Directive,
   ElementRef,
   Host,
   HostListener,
   Inject,
+  inject,
   Input,
-  OnDestroy,
   PLATFORM_ID
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
 
 import { Placement } from './placement';
@@ -18,10 +19,9 @@ import { TooltipService } from './tooltip.service';
 import { isMobile, watchForLongPress } from './utils';
 
 @Directive({
-  selector: '[lcTooltip]',
-  standalone: true
+  selector: '[lcTooltip]'
 })
-export class TooltipDirective implements OnDestroy, AfterViewInit {
+export class TooltipDirective {
   @Input('lcTooltip')
   _content = '';
 
@@ -41,26 +41,29 @@ export class TooltipDirective implements OnDestroy, AfterViewInit {
     @Host() private readonly _hostElement: ElementRef<HTMLElement>,
     @Inject(PLATFORM_ID) private readonly _platformId: object,
     private readonly _tooltipService: TooltipService
-  ) {}
+  ) {
+    const destroyRef = inject(DestroyRef);
 
-  ngOnDestroy() {
-    this._tooltipService.hide();
-    this._longPressEventSubscription?.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    if (!isPlatformBrowser(this._platformId)) {
-      return;
-    }
-
-    if (isMobile()) {
-      this._longPressEventSubscription = watchForLongPress(this._hostElement.nativeElement).subscribe({
-        next: event => {
-          this._isLongPressing = true;
-          this._showTooltip(event);
+    afterNextRender({
+      write: () => {
+        if (!isMobile()) {
+          return;
         }
-      });
-    }
+
+        watchForLongPress(this._hostElement.nativeElement)
+          .pipe(takeUntilDestroyed(destroyRef))
+          .subscribe({
+            next: event => {
+              this._isLongPressing = true;
+              this._showTooltip(event);
+            }
+          });
+
+        destroyRef.onDestroy(() => {
+          this._tooltipService.hide();
+        });
+      }
+    });
   }
 
   private _showTooltip(event: MouseEvent | KeyboardEvent | PointerEvent) {

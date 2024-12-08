@@ -5,7 +5,6 @@ import { TooltipDirective, TooltipService } from 'projects/angular-tooltip/src/p
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TooltipDirective],
   selector: 'lc-root',
-  standalone: true,
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html'
 })

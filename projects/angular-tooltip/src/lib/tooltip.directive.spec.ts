@@ -17,7 +17,6 @@ import { TooltipDirective } from './tooltip.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TooltipDirective],
   selector: 'lc-test',
-  standalone: true,
   template: `
     <button
       #button
