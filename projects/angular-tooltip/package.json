@@ -1,7 +1,7 @@
 {
   "name": "@lazycuh/angular-tooltip",
   "description": "Easily show tooltips programmatically and/or declaratively in Angular",
-  "version": "1.1.7",
+  "version": "2.0.0",
   "author": {
     "name": "Baby Beet"
   },
