@@ -10,14 +10,14 @@ import { isMobile, watchForLongPress } from './utils';
   selector: '[lcTooltip]'
 })
 export class TooltipDirective {
-  @Input('lcTooltip')
+  @Input({ alias: 'lcTooltip', required: true })
   _content: TooltipConfiguration['content'] = '';
 
   @Input('lcTooltipPlacement')
   _placement?: TooltipConfiguration['placement'] = 'vertical';
 
   @Input('lcTooltipTheme')
-  _theme: TooltipConfiguration['theme'] = 'light';
+  _theme?: TooltipConfiguration['theme'];
 
   @Input('lcTooltipShowWhenDisabled')
   _shouldShowWhenDisabled = false;
