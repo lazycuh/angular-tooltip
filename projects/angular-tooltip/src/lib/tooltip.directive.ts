@@ -1,21 +1,8 @@
-import {
-  afterNextRender,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  Host,
-  HostListener,
-  Inject,
-  inject,
-  Input,
-  PLATFORM_ID
-} from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, ElementRef, Host, HostListener, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subscription } from 'rxjs';
 
-import { Placement } from './placement';
-import { Theme } from './theme';
 import { TooltipService } from './tooltip.service';
+import { TooltipConfiguration } from './tooltip-configuration';
 import { isMobile, watchForLongPress } from './utils';
 
 @Directive({
@@ -23,23 +10,21 @@ import { isMobile, watchForLongPress } from './utils';
 })
 export class TooltipDirective {
   @Input('lcTooltip')
-  _content = '';
+  _content: TooltipConfiguration['content'] = '';
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('lcTooltipPlacement')
-  _placement?: 'vertical' | 'horizontal' | Placement;
+  _placement?: TooltipConfiguration['placement'] = 'vertical';
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('lcTooltipTheme')
-  _theme: Theme = 'light';
+  _theme: TooltipConfiguration['theme'] = 'light';
 
-  private _longPressEventSubscription?: Subscription;
   private _isLongPressing = false;
   private _timeoutId = -1;
 
   constructor(
     @Host() private readonly _hostElement: ElementRef<HTMLElement>,
-    @Inject(PLATFORM_ID) private readonly _platformId: object,
     private readonly _tooltipService: TooltipService
   ) {
     const destroyRef = inject(DestroyRef);
@@ -83,7 +68,7 @@ export class TooltipDirective {
         placement: this._placement!,
         theme: this._theme
       });
-    }, 500);
+    }, 250);
   }
 
   private _hideTooltip(event: MouseEvent | KeyboardEvent) {

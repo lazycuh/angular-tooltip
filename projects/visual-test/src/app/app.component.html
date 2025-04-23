@@ -13,6 +13,12 @@
     Hover me (TooltipDirective)
 </button>
 &nbsp;
+<button
+    type="button"
+    [lcTooltip]="simpleTemplate">
+    Hover me (TooltipDirective using template)
+</button>
+&nbsp;
 
 <button
     lcTooltip="Hello World"
@@ -27,4 +33,8 @@
     <span>
         Hello <strong>{{ name }}</strong>
     </span>
+</ng-template>
+
+<ng-template #simpleTemplate>
+    <span> Hello <strong>Angular!!!</strong> </span>
 </ng-template>

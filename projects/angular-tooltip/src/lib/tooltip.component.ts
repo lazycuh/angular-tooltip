@@ -24,9 +24,11 @@ import { Theme } from './theme';
 })
 export class TooltipComponent implements OnDestroy {
   protected readonly _content = signal('');
-  protected readonly _idForAriaDescribedBy = `__${btoa(String(Math.random() + Math.random()))
-    .substring(5, 15)
-    .toLowerCase()}__`;
+  protected readonly _idForAriaDescribedBy = signal(
+    `__${btoa(String(Math.random() + Math.random()))
+      .substring(5, 15)
+      .toLowerCase()}__`
+  );
 
   /**
    * Optional class to add to this component
@@ -56,8 +58,8 @@ export class TooltipComponent implements OnDestroy {
 
   hide() {
     this._isVisible = false;
-    this._tooltip.classList.remove('enter');
-    this._tooltip.classList.add('leave');
+    this._tooltip.classList.remove('is-entering');
+    this._tooltip.classList.add('is-leaving');
   }
 
   ngOnDestroy() {
@@ -88,7 +90,7 @@ export class TooltipComponent implements OnDestroy {
    */
   show(anchor: Element, content: Node) {
     if (document.body.contains(anchor)) {
-      anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy);
+      anchor.setAttribute('aria-describedby', this._idForAriaDescribedBy());
       this._showTooltip(anchor.getBoundingClientRect(), content);
     }
   }
@@ -111,7 +113,7 @@ export class TooltipComponent implements OnDestroy {
   }
 
   private _showBottom(anchorBoundingBox: Omit<DOMRect, 'toJSON'>) {
-    this._tooltip.classList.add('bottom');
+    this._tooltip.classList.add('bottom-anchored');
 
     setTimeout(() => {
       const tooltipBoundingBox = this._tooltip.getBoundingClientRect();
@@ -139,22 +141,8 @@ export class TooltipComponent implements OnDestroy {
           tooltipTop = spaceBetweenArrowAndAnchor / 2;
         }
 
-        this._tooltip.classList.remove('bottom');
-        this._tooltip.classList.add('top');
-      } else {
-        /**
-         * If the tooltip overflows the bottom edge of viewport, we want to shrink
-         * its height by the amount of overflowing distance and some spacing.
-         */
-        // const effectiveTooltipBottom = tooltipTop + tooltipBoundingBox.height;
-        // const differenceBetweenTooltipBottomAndViewportBottom = effectiveTooltipBottom - window.innerHeight;
-        // if (differenceBetweenTooltipBottomAndViewportBottom > 0) {
-        //   const newTooltipHeight =
-        //     tooltipBoundingBox.height -
-        //     differenceBetweenTooltipBottomAndViewportBottom -
-        //     spaceBetweenArrowAndAnchor / 2;
-        //   this._tooltip.style.height = `${newTooltipHeight}px`;
-        // }
+        this._tooltip.classList.remove('bottom-anchored');
+        this._tooltip.classList.add('top-anchored');
       }
 
       const horizontalDifference =
@@ -162,11 +150,10 @@ export class TooltipComponent implements OnDestroy {
         this._calculateLeftEdgeOverflowingDistance(tooltipLeft);
       this._tooltip.style.left = `${tooltipLeft - horizontalDifference}px`;
       this._tooltip.style.top = `${tooltipTop}px`;
-      this._tooltip.style.visibility = 'visible';
 
       this._isVisible = true;
-      this._tooltip.classList.add('enter');
-    }, 0);
+      this._tooltip.classList.add('is-entering');
+    }, 250);
   }
 
   /**
@@ -204,7 +191,7 @@ export class TooltipComponent implements OnDestroy {
   }
 
   private _showRight(anchorBoundingBox: Omit<DOMRect, 'toJSON'>) {
-    this._tooltip.classList.add('right');
+    this._tooltip.classList.add('right-anchored');
 
     setTimeout(() => {
       const tooltipBoundingBox = this._tooltip.getBoundingClientRect();
@@ -234,8 +221,8 @@ export class TooltipComponent implements OnDestroy {
           tooltipLeft = spaceBetweenArrowAndAnchor / 2;
         }
 
-        this._tooltip.classList.remove('right');
-        this._tooltip.classList.add('left');
+        this._tooltip.classList.remove('right-anchored');
+        this._tooltip.classList.add('left-anchored');
       } else {
         /**
          * If the tooltip overflows the right edge of viewport, we want to shrink
@@ -256,12 +243,11 @@ export class TooltipComponent implements OnDestroy {
         this._calculateLeftEdgeOverflowingDistance(tooltipLeft);
       this._tooltip.style.left = `${tooltipLeft - horizontalDifference}px`;
       this._tooltip.style.top = `${tooltipTop}px`;
-      this._tooltip.style.visibility = 'visible';
 
       this._isVisible = true;
 
-      this._tooltip.classList.add('enter');
-    }, 0);
+      this._tooltip.classList.add('is-entering');
+    }, 250);
   }
 
   /**

@@ -118,8 +118,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}.light`).exists();
-    assertThat(`${classSelectorPrefix}.dark`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.light-theme`).exists();
+    assertThat(`${classSelectorPrefix}.dark-theme`).doesNotExist();
   });
 
   it('Should be able to configure a different default theme', async () => {
@@ -127,8 +127,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(1000);
 
-    assertThat(`${classSelectorPrefix}.dark`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.light`).exists();
+    assertThat(`${classSelectorPrefix}.dark-theme`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.light-theme`).exists();
 
     testBedComponent.hideTooltip();
 
@@ -140,8 +140,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(1000);
 
-    assertThat(`${classSelectorPrefix}.light`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark`).exists();
+    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
 
     // Set back to the expected default
     TooltipService.setDefaultTheme('light');
@@ -154,8 +154,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.light`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark`).exists();
+    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
   });
 
   it('Should add the provided class name', async () => {
@@ -171,8 +171,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.bottom`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.right`).exists();
+    assertThat(`${classSelectorPrefix}.bottom-anchored`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.right-anchored`).exists();
   });
 
   it('#showAt() should show tooltip', async () => {

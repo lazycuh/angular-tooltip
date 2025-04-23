@@ -71,7 +71,7 @@ Because `TooltipDirective` is a standalone directive, you must import it into yo
 
 #### `lcTooltip`
 
-Sets the tooltip message to show.
+Sets the tooltip message to show. This input accepts a string, or a reference to a `TemplateRef` created by `<ng-template>`.
 
 #### `lcTooltipPlacement`
 

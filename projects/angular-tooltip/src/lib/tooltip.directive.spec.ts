@@ -81,8 +81,8 @@ describe(TooltipDirective.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.bottom`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.right`).exists();
+    assertThat(`${classSelectorPrefix}.bottom-anchored`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.right-anchored`).exists();
   });
 
   it('Should render with the provided theme properly', async () => {
@@ -91,8 +91,8 @@ describe(TooltipDirective.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.light`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark`).exists();
+    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
+    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
   });
 
   it('Should show tooltip on pointerover', async () => {

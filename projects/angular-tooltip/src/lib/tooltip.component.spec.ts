@@ -32,7 +32,7 @@ describe(TooltipComponent.name, () => {
     content.innerHTML = 'Hello World';
     component.show(anchor, content);
 
-    await delayBy(16);
+    await delayBy(300);
 
     assertThat(debugElement.query(By.css(`${classPrefix}__content`))).hasInnerHtml('<span>Hello World</span>');
     assertThat(debugElement.query(By.css(`${classPrefix}__content`))).hasTextContent('Hello World');
@@ -41,38 +41,38 @@ describe(TooltipComponent.name, () => {
   it('Should be placed at the bottom of anchor element by default', async () => {
     component.show(anchor, anchor);
 
-    await delayBy(16);
+    await delayBy(300);
 
-    assertThat(debugElement.query(By.css('.top'))).doesNotExist();
-    assertThat(debugElement.query(By.css('.bottom'))).exists();
+    assertThat(debugElement.query(By.css('.top-anchored'))).doesNotExist();
+    assertThat(debugElement.query(By.css('.bottom-anchored'))).exists();
   });
 
   it('Should be placed at the top of the anchor if it overflows the bottom edge of the viewport', async () => {
     anchor.setAttribute('style', ['position:fixed', 'bottom:0'].join(';'));
     component.show(anchor, document.createElement('span'));
 
-    await delayBy(16);
+    await delayBy(300);
 
-    assertThat(debugElement.query(By.css('.bottom'))).doesNotExist();
-    assertThat(debugElement.query(By.css('.top'))).exists();
+    assertThat(debugElement.query(By.css('.bottom-anchored'))).doesNotExist();
+    assertThat(debugElement.query(By.css('.top-anchored'))).exists();
   });
 
   it('Should use light theme by default', async () => {
     component.show(anchor, anchor);
 
-    await delayBy(16);
+    await delayBy(300);
 
-    assertThat(debugElement.query(By.css('.light'))).exists();
+    assertThat(debugElement.query(By.css('.light-theme'))).exists();
   });
 
   it('Should be placed at the right of anchor element if placement is horizontal', async () => {
     component.setPlacement('horizontal');
     component.show(anchor, anchor);
 
-    await delayBy(50);
+    await delayBy(300);
 
-    assertThat(debugElement.query(By.css('.left'))).doesNotExist();
-    assertThat(debugElement.query(By.css('.right'))).exists();
+    assertThat(debugElement.query(By.css('.left-anchored'))).doesNotExist();
+    assertThat(debugElement.query(By.css('.right-anchored'))).exists();
   });
 
   it('Should be placed at the left of the anchor if it overflows the right edge of the viewport', async () => {
@@ -82,10 +82,10 @@ describe(TooltipComponent.name, () => {
     component.setPlacement('horizontal');
     component.show(anchor, anchor);
 
-    await delayBy(16);
+    await delayBy(300);
 
-    assertThat(debugElement.query(By.css('.right'))).doesNotExist();
-    assertThat(debugElement.query(By.css('.left'))).exists();
+    assertThat(debugElement.query(By.css('.right-anchored'))).doesNotExist();
+    assertThat(debugElement.query(By.css('.left-anchored'))).exists();
   });
 
   it('#showAt() should show tooltip', async () => {
@@ -94,7 +94,7 @@ describe(TooltipComponent.name, () => {
     content.innerHTML = 'Hello World';
     component.showAt(10, 10, content);
 
-    await delayBy(16);
+    await delayBy(300);
 
     assertThat(debugElement.query(By.css(`${classPrefix}__content`))).hasTextContent('Hello World');
   });
