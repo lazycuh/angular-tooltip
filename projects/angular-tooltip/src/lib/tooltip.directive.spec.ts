@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,6 +25,7 @@ import { TooltipDirective } from './tooltip.directive';
       [disabled]="disabled()"
       [lcTooltip]="content()"
       [lcTooltipPlacement]="placement()"
+      [lcTooltipShowWhenDisabled]="shouldShowWhenDisabled()"
       [lcTooltipTheme]="theme()">
       Hover me
     </button>
@@ -34,6 +36,7 @@ class TestBedComponent {
   readonly placement = signal<Placement>('vertical');
   readonly theme = signal<Theme>('light');
   readonly disabled = signal(false);
+  readonly shouldShowWhenDisabled = signal(false);
 
   @ViewChild('button', { read: ElementRef })
   readonly buttonRef!: ElementRef<HTMLButtonElement>;
@@ -143,7 +146,7 @@ describe(TooltipDirective.name, () => {
     assertThat(classSelectorPrefix).doesNotExist();
   });
 
-  it('Should not show tooltip when the anchor element is disabled', async () => {
+  it('Should not show tooltip when the anchor element is disabled and the `lcTooltipShowWhenDiabled` is not true', async () => {
     testBedComponent.content.set('Hello TooltipDirective');
     testBedComponent.disabled.set(true);
 
@@ -154,6 +157,20 @@ describe(TooltipDirective.name, () => {
     await delayBy(500);
 
     assertThat(`${classSelectorPrefix}__content`).doesNotExist();
+  });
+
+  it('Should show tooltip when the anchor element is disabled and the `lcTooltipShowWhenDiabled` is true', async () => {
+    testBedComponent.content.set('Hello TooltipDirective');
+    testBedComponent.disabled.set(true);
+    testBedComponent.shouldShowWhenDisabled.set(true);
+
+    await delayBy(16);
+
+    testBedComponent.dispatchEvent('pointerover');
+
+    await delayBy(500);
+
+    assertThat(`${classSelectorPrefix}__content`).exists();
   });
 
   it('Should not show tooltip when the tooltip content is empty', async () => {

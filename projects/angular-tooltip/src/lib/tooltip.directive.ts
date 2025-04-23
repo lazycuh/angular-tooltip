@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { afterNextRender, DestroyRef, Directive, ElementRef, Host, HostListener, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -12,13 +13,14 @@ export class TooltipDirective {
   @Input('lcTooltip')
   _content: TooltipConfiguration['content'] = '';
 
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('lcTooltipPlacement')
   _placement?: TooltipConfiguration['placement'] = 'vertical';
 
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('lcTooltipTheme')
   _theme: TooltipConfiguration['theme'] = 'light';
+
+  @Input('lcTooltipShowWhenDisabled')
+  _shouldShowWhenDisabled = false;
 
   private _isLongPressing = false;
   private _timeoutId = -1;
@@ -58,17 +60,17 @@ export class TooltipDirective {
 
     const tooltipAnchor = event.target as Element;
 
-    if ((tooltipAnchor instanceof HTMLButtonElement && tooltipAnchor.disabled) || this._content === '') {
-      return;
+    // Only show the tooltip if the content is present and the anchor is not disabled
+    // or if the tooltip should be shown when disabled
+    if (this._content && (!('disabled' in tooltipAnchor) || !tooltipAnchor.disabled || this._shouldShowWhenDisabled)) {
+      this._timeoutId = window.setTimeout(() => {
+        this._tooltipService.show(tooltipAnchor, {
+          content: this._content,
+          placement: this._placement!,
+          theme: this._theme
+        });
+      }, 250);
     }
-
-    this._timeoutId = window.setTimeout(() => {
-      this._tooltipService.show(tooltipAnchor, {
-        content: this._content,
-        placement: this._placement!,
-        theme: this._theme
-      });
-    }, 250);
   }
 
   private _hideTooltip(event: MouseEvent | KeyboardEvent) {

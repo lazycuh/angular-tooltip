@@ -92,7 +92,7 @@ export class TooltipService {
     }
 
     if (configuration.content instanceof TemplateRef) {
-      const embeddedView = configuration.content.createEmbeddedView(configuration.context || {});
+      const embeddedView = configuration.content.createEmbeddedView(configuration.context ?? {});
 
       this._applicationRef.attachView(embeddedView);
 

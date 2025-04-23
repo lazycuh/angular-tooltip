@@ -15,6 +15,7 @@ Easily show tooltips programmatically and/or declaratively in Angular.
     - [`lcTooltip`](#lctooltip)
     - [`lcTooltipPlacement`](#lctooltipplacement)
     - [`lcTooltipTheme`](#lctooltiptheme)
+    - [`lcTooltipShowWhenDisabled`](#lctooltipshowwhendisabled)
   - [Code example with `TooltipDirective`](#code-example-with-tooltipdirective)
   - [Result](#result)
 - [Using `TooltipService`](#using-tooltipservice)
@@ -80,6 +81,10 @@ Sets the position where the tooltip is placed. Valid values are `vertical` and `
 #### `lcTooltipTheme`
 
 Sets the theme. Must be either `dark` or `light`. `dark` is the default if not provided.
+
+#### `lcTooltipShowWhenDisabled`
+
+Controls whether to show the tooltip even when the tooltip trigger is disabled. `false` by default.
 
 ### Code example with `TooltipDirective`
 
