@@ -220,16 +220,4 @@ describe(`${TooltipDirective.name} on mobile`, () => {
 
     assertThat(classSelectorPrefix).doesNotExist();
   });
-
-  it('Should not show tooltip when clicking on the tooltip trigger after hovering it', async () => {
-    testBedComponent.dispatchEvent('pointerover');
-
-    await delayBy(500);
-
-    testBedComponent.dispatchEvent('click');
-
-    await delayBy(1000);
-
-    assertThat(classSelectorPrefix).doesNotExist();
-  });
 });

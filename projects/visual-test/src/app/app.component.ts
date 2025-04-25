@@ -23,6 +23,6 @@ export class AppComponent {
   }
 
   onHideTooltip() {
-    this._tooltipService.hide();
+    this._tooltipService.hideAll();
   }
 }

@@ -97,6 +97,8 @@ export class TooltipComponent implements OnDestroy {
 
   private _showTooltip(anchorBoundingBox: Omit<DOMRect, 'toJSON'>, content: Node) {
     this._tooltip = this._host.nativeElement.firstElementChild as HTMLDivElement;
+    this._tooltip.style.visibility = 'hidden';
+    document.body.appendChild(this._host.nativeElement);
     this._tooltip.querySelector('.lc-tooltip__content')?.appendChild(content);
 
     switch (this._placement) {
@@ -153,7 +155,7 @@ export class TooltipComponent implements OnDestroy {
 
       this._isVisible = true;
       this._tooltip.classList.add('is-entering');
-    }, 250);
+    }, 64);
   }
 
   /**

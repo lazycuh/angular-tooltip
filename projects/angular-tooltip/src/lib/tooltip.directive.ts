@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
+import { TooltipRef } from './tooltip-ref';
 import { isMobile, watchForLongPress } from './utils';
 
 @Directive({
@@ -24,6 +25,7 @@ export class TooltipDirective {
 
   private _isLongPressing = false;
   private _timeoutId = -1;
+  private _tooltipRef?: TooltipRef;
 
   constructor(
     @Host() private readonly _hostElement: ElementRef<HTMLElement>,
@@ -47,7 +49,7 @@ export class TooltipDirective {
           });
 
         destroyRef.onDestroy(() => {
-          this._tooltipService.hide();
+          this._tooltipService.hideAll();
         });
       }
     });
@@ -64,7 +66,7 @@ export class TooltipDirective {
     // or if the tooltip should be shown when disabled
     if (this._content && (!('disabled' in tooltipAnchor) || !tooltipAnchor.disabled || this._shouldShowWhenDisabled)) {
       this._timeoutId = window.setTimeout(() => {
-        this._tooltipService.show(tooltipAnchor, {
+        this._tooltipRef = this._tooltipService.show(tooltipAnchor, {
           content: this._content,
           placement: this._placement!,
           theme: this._theme
@@ -77,7 +79,7 @@ export class TooltipDirective {
     event.stopPropagation();
     clearTimeout(this._timeoutId);
 
-    this._tooltipService.hide();
+    this._tooltipRef?.hide();
   }
 
   /**
@@ -99,7 +101,6 @@ export class TooltipDirective {
 
   @HostListener('pointerout', ['$event'])
   @HostListener('blur', ['$event'])
-  @HostListener('click', ['$event'])
   protected _onHideTooltip(event: MouseEvent | KeyboardEvent) {
     if (!this._isLongPressing) {
       this._hideTooltip(event);

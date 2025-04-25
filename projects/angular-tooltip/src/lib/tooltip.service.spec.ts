@@ -44,7 +44,7 @@ class TestBedComponent {
   }
 
   hideTooltip() {
-    this._service.hide();
+    this._service.hideAll();
   }
 }
 

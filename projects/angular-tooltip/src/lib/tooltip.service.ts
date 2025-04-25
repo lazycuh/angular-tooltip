@@ -3,6 +3,7 @@ import { ApplicationRef, ComponentRef, createComponent, EmbeddedViewRef, Injecta
 import { Theme } from './theme';
 import { TooltipComponent } from './tooltip.component';
 import { TooltipConfiguration } from './tooltip-configuration';
+import { TooltipRef } from './tooltip-ref';
 
 /**
  * This class allows to programmatically show a tooltip anchored at an element.
@@ -16,7 +17,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
 export class TooltipService {
   private static _defaultTheme: Theme = 'light';
 
-  private readonly _openedTooltips = new Set<TooltipComponent>();
+  private readonly _openedTooltips = new Set<TooltipRef>();
 
   constructor(private readonly _applicationRef: ApplicationRef) {}
 
@@ -39,44 +40,45 @@ export class TooltipService {
   show(anchor: Element, configuration: TooltipConfiguration) {
     const result = this._prepareTooltip(configuration);
 
-    result.tooltipRef.instance.show(anchor, result.content.content);
+    result.tooltipComponentRef.instance.show(anchor, result.content.content);
 
-    this._openedTooltips.add(result.tooltipRef.instance);
+    const tooltipRef = new TooltipRef(result.tooltipComponentRef.instance);
+    this._openedTooltips.add(tooltipRef);
+
+    return tooltipRef;
   }
 
   private _prepareTooltip(configuration: TooltipConfiguration) {
-    const tooltipRef = createComponent(TooltipComponent, {
+    const tooltipComponentRef = createComponent(TooltipComponent, {
       environmentInjector: this._applicationRef.injector
     });
 
     const createdContent = this._createContent(configuration);
 
     if (configuration.className) {
-      tooltipRef.instance.setClassName(configuration.className);
+      tooltipComponentRef.instance.setClassName(configuration.className);
     }
 
     if (configuration.placement) {
-      tooltipRef.instance.setPlacement(configuration.placement);
+      tooltipComponentRef.instance.setPlacement(configuration.placement);
     }
 
-    tooltipRef.instance.setTheme(configuration.theme ?? TooltipService._defaultTheme);
+    tooltipComponentRef.instance.setTheme(configuration.theme ?? TooltipService._defaultTheme);
 
-    tooltipRef.instance.setAfterClosedListener(() => {
-      document.body.removeChild(tooltipRef.location.nativeElement);
-      this._applicationRef.detachView(tooltipRef.hostView);
-      tooltipRef.destroy();
+    tooltipComponentRef.instance.setAfterClosedListener(() => {
+      document.body.removeChild(tooltipComponentRef.location.nativeElement);
+      this._applicationRef.detachView(tooltipComponentRef.hostView);
+      tooltipComponentRef.destroy();
       createdContent.ref?.destroy();
     });
 
-    this._applicationRef.attachView(tooltipRef.hostView);
+    this._applicationRef.attachView(tooltipComponentRef.hostView);
 
-    tooltipRef.changeDetectorRef.detectChanges();
-
-    document.body.appendChild(tooltipRef.location.nativeElement);
+    tooltipComponentRef.changeDetectorRef.detectChanges();
 
     return {
       content: createdContent,
-      tooltipRef
+      tooltipComponentRef
     };
   }
 
@@ -135,15 +137,18 @@ export class TooltipService {
   showAt(x: number, y: number, configuration: TooltipConfiguration) {
     const result = this._prepareTooltip(configuration);
 
-    result.tooltipRef.instance.showAt(x, y, result.content.content);
+    result.tooltipComponentRef.instance.showAt(x, y, result.content.content);
 
-    this._openedTooltips.add(result.tooltipRef.instance);
+    const tooltipRef = new TooltipRef(result.tooltipComponentRef.instance);
+    this._openedTooltips.add(tooltipRef);
+
+    return tooltipRef;
   }
 
   /**
    * Hide all opened tooltips.
    */
-  hide() {
+  hideAll() {
     for (const openedTooltip of this._openedTooltips) {
       openedTooltip.hide();
     }
