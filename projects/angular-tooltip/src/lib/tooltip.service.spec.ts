@@ -1,12 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  provideExperimentalZonelessChangeDetection,
-  TemplateRef,
-  viewChild
-} from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { assertThat, delayBy } from '@lazycuh/angular-testing-kit';
+import { ChangeDetectionStrategy, Component, TemplateRef, viewChild } from '@angular/core';
+import { screen } from '@testing-library/angular';
+import { delayBy, renderComponent } from 'projects/angular-tooltip/test/helpers';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { TooltipService } from './tooltip.service';
 import { TooltipConfiguration } from './tooltip-configuration';
@@ -50,26 +45,14 @@ class TestBedComponent {
 
 describe(TooltipService.name, () => {
   const classSelectorPrefix = '.lc-tooltip';
-  let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
   let anchor: HTMLElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestBedComponent],
-      providers: [provideExperimentalZonelessChangeDetection()]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestBedComponent);
-    testBedComponent = fixture.componentInstance;
-    fixture.detectChanges();
+    const renderResult = await renderComponent(TestBedComponent);
+    testBedComponent = renderResult.fixture.componentInstance;
     anchor = document.createElement('button');
     document.body.appendChild(anchor);
-  });
-
-  afterEach(() => {
-    document.body.removeChild(anchor);
-    fixture.destroy();
   });
 
   it('Should render the provided string content correctly', async () => {
@@ -79,7 +62,7 @@ describe(TooltipService.name, () => {
 
     await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 
   it('Should render the provided template ref content correctly', async () => {
@@ -92,7 +75,7 @@ describe(TooltipService.name, () => {
 
     await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello TemplateRef');
+    expect(screen.getByText('Hello TemplateRef')).toBeInTheDocument();
   });
 
   it('Should render the provided component content correctly', async () => {
@@ -110,7 +93,7 @@ describe(TooltipService.name, () => {
 
     await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello @Component');
+    expect(screen.getByText('Hello @Component')).toBeInTheDocument();
   });
 
   it('Should use light theme by default', async () => {
@@ -118,30 +101,30 @@ describe(TooltipService.name, () => {
 
     await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}.light-theme`).exists();
-    assertThat(`${classSelectorPrefix}.dark-theme`).doesNotExist();
+    expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).not.toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.light-theme`)).toBeInTheDocument();
   });
 
   it('Should be able to configure a different default theme', async () => {
     testBedComponent.showTooltip(anchor);
 
-    await delayBy(1000);
+    await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}.dark-theme`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.light-theme`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).not.toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.light-theme`)).toBeInTheDocument();
 
     testBedComponent.hideTooltip();
 
-    await delayBy(1000);
+    await delayBy(16);
 
     TooltipService.setDefaultTheme('dark');
 
     testBedComponent.showTooltip(anchor);
 
-    await delayBy(1000);
+    await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.light-theme.is-leaving`)).toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).toBeInTheDocument();
 
     // Set back to the expected default
     TooltipService.setDefaultTheme('light');
@@ -154,8 +137,8 @@ describe(TooltipService.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.light-theme`)).not.toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).toBeInTheDocument();
   });
 
   it('Should add the provided class name', async () => {
@@ -163,23 +146,23 @@ describe(TooltipService.name, () => {
 
     await delayBy(500);
 
-    assertThat(`${classSelectorPrefix}.hello-world`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.hello-world`)).toBeInTheDocument();
   });
 
   it('Should be able to configure the placement', async () => {
     testBedComponent.showTooltip(anchor, { placement: 'horizontal' });
 
-    await delayBy(500);
+    await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}.bottom-anchored`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.right-anchored`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.bottom-anchored`)).not.toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.right-anchored`)).toBeInTheDocument();
   });
 
   it('#showAt() should show tooltip', async () => {
     testBedComponent.showTooltipAt(0, 0, { content: 'Hello World' });
 
-    await delayBy(500);
+    await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 });

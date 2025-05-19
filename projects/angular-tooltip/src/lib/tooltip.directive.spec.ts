@@ -1,14 +1,8 @@
 /* eslint-disable max-len */
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  provideExperimentalZonelessChangeDetection,
-  signal,
-  ViewChild
-} from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { assertThat, delayBy, fireEvent } from '@lazycuh/angular-testing-kit';
+import { ChangeDetectionStrategy, Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { fireEvent, screen } from '@testing-library/angular';
+import { delayBy, renderComponent } from 'projects/angular-tooltip/test/helpers';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
@@ -45,105 +39,95 @@ class TestBedComponent {
     eventType: T,
     eventDetail?: CustomEventInit<HTMLElementEventMap[T]>['detail']
   ) {
-    fireEvent(this.buttonRef.nativeElement, eventType, eventDetail);
+    const customEvent = new CustomEvent(eventType, eventDetail);
+    this.buttonRef.nativeElement.dispatchEvent(customEvent);
   }
 }
 
 describe(TooltipDirective.name, () => {
   const classSelectorPrefix = '.lc-tooltip';
-  let fixture: ComponentFixture<TestBedComponent>;
   let testBedComponent: TestBedComponent;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TooltipDirective, TestBedComponent],
-      providers: [provideExperimentalZonelessChangeDetection()]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestBedComponent);
-    testBedComponent = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    fixture.destroy();
+    const renderResult = await renderComponent(TestBedComponent);
+    testBedComponent = renderResult.fixture.componentInstance;
   });
 
   it('Should render the provided content properly', async () => {
     testBedComponent.content.set('Hello TooltipDirective');
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello TooltipDirective');
+    expect(screen.getByText('Hello TooltipDirective')).toBeInTheDocument();
   });
 
   it('Should render with the provided placement properly', async () => {
     testBedComponent.placement.set('horizontal');
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}.bottom-anchored`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.right-anchored`).exists();
+    expect(document.body.querySelector('.bottom-anchored')).not.toBeInTheDocument();
+    expect(document.body.querySelector('.right-anchored')).toBeInTheDocument();
   });
 
   it('Should render with the provided theme properly', async () => {
     testBedComponent.theme.set('dark');
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}.light-theme`).doesNotExist();
-    assertThat(`${classSelectorPrefix}.dark-theme`).exists();
+    expect(document.body.querySelector(`${classSelectorPrefix}.light-theme`)).not.toBeInTheDocument();
+    expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).toBeInTheDocument();
   });
 
   it('Should show tooltip on pointerover', async () => {
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 
   it('Should hide tooltip on pointerout', async () => {
-    spyOnProperty(navigator, 'userAgent', 'get').and.callFake(() => 'chrome');
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('chrome');
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(1000);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
 
     testBedComponent.dispatchEvent('pointerout');
 
-    await delayBy(500);
+    await delayBy(16);
 
-    assertThat(classSelectorPrefix).doesNotExist();
+    expect(document.body.querySelector(`${classSelectorPrefix}.is-leaving`)).toBeInTheDocument();
   });
 
   it('Should show tooltip when the target element has keyboard focus', async () => {
     testBedComponent.buttonRef.nativeElement.focus();
     testBedComponent.dispatchEvent('keyup');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 
   it('Should hide tooltip when the target element loses keyboard focus', async () => {
     testBedComponent.buttonRef.nativeElement.focus();
     testBedComponent.dispatchEvent('keyup');
 
-    await delayBy(1000);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
 
     testBedComponent.buttonRef.nativeElement.blur();
 
-    await delayBy(500);
+    await delayBy(16);
 
-    assertThat(classSelectorPrefix).doesNotExist();
+    expect(document.body.querySelector(`${classSelectorPrefix}.is-leaving`)).toBeInTheDocument();
   });
 
   it('Should not show tooltip when the anchor element is disabled and the `lcTooltipShowWhenDiabled` is not true', async () => {
@@ -154,9 +138,9 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(16);
 
-    assertThat(`${classSelectorPrefix}__content`).doesNotExist();
+    expect(screen.queryByText('Hello TooltipDirective')).not.toBeInTheDocument();
   });
 
   it('Should show tooltip when the anchor element is disabled and the `lcTooltipShowWhenDiabled` is true', async () => {
@@ -168,9 +152,9 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).exists();
+    expect(screen.getByText('Hello TooltipDirective')).toBeInTheDocument();
   });
 
   it('Should not show tooltip when the tooltip content is empty', async () => {
@@ -180,44 +164,33 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(500);
+    await delayBy(250);
 
-    assertThat(`${classSelectorPrefix}__content`).doesNotExist();
+    expect(document.body.querySelector(`${classSelectorPrefix}__content`)).not.toBeInTheDocument();
   });
 });
 
 describe(`${TooltipDirective.name} on mobile`, () => {
-  const classSelectorPrefix = '.lc-tooltip';
-  let fixture: ComponentFixture<TestBedComponent>;
-  let testBedComponent: TestBedComponent;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TooltipDirective, TestBedComponent],
-      providers: [provideExperimentalZonelessChangeDetection()]
-    }).compileComponents();
-
-    spyOnProperty(window.navigator, 'userAgent').and.returnValue('Android');
-
-    fixture = TestBed.createComponent(TestBedComponent);
-    testBedComponent = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   it('Should show tooltip on long presses on mobile only', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Android');
+
+    const renderResult = await renderComponent(TestBedComponent);
+    const testBedComponent = renderResult.fixture.componentInstance;
+
     testBedComponent.dispatchEvent('pointerdown');
 
-    await delayBy(1500);
+    await vi.advanceTimersByTimeAsync(1000);
 
-    assertThat(`${classSelectorPrefix}__content`).hasTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
 
-    fireEvent(window, 'pointerup');
-    await delayBy(500);
+    expect(document.body.querySelector('.lc-tooltip.is-leaving')).not.toBeInTheDocument();
 
-    assertThat(classSelectorPrefix).doesNotExist();
+    vi.useRealTimers();
+
+    fireEvent(window, new CustomEvent('pointerup'));
+    await delayBy(16);
+
+    expect(document.body.querySelector('.lc-tooltip.is-leaving')).toBeInTheDocument();
   });
 });

@@ -35,22 +35,20 @@ export class TooltipDirective {
 
     afterNextRender({
       write: () => {
-        if (!isMobile()) {
-          return;
-        }
-
-        watchForLongPress(this._hostElement.nativeElement)
-          .pipe(takeUntilDestroyed(destroyRef))
-          .subscribe({
-            next: event => {
-              this._isLongPressing = true;
-              this._showTooltip(event);
-            }
-          });
-
         destroyRef.onDestroy(() => {
           this._tooltipService.hideAll();
         });
+
+        if (isMobile()) {
+          watchForLongPress(this._hostElement.nativeElement)
+            .pipe(takeUntilDestroyed(destroyRef))
+            .subscribe({
+              next: event => {
+                this._isLongPressing = true;
+                this._showTooltip(event);
+              }
+            });
+        }
       }
     });
   }

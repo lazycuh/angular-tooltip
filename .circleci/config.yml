@@ -74,8 +74,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - run:
           name: Unit testing
           command: |
