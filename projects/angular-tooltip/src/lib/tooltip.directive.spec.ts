@@ -55,18 +55,18 @@ describe(TooltipDirective.name, () => {
 
   it('Should render the provided content properly', async () => {
     testBedComponent.content.set('Hello TooltipDirective');
-    testBedComponent.dispatchEvent('pointerover');
+    await delayBy(16);
 
-    await delayBy(250);
+    testBedComponent.dispatchEvent('pointerover');
 
     expect(screen.getByText('Hello TooltipDirective')).toBeInTheDocument();
   });
 
   it('Should render with the provided placement properly', async () => {
     testBedComponent.placement.set('horizontal');
-    testBedComponent.dispatchEvent('pointerover');
+    await delayBy(16);
 
-    await delayBy(250);
+    testBedComponent.dispatchEvent('pointerover');
 
     expect(document.body.querySelector('.bottom-anchored')).not.toBeInTheDocument();
     expect(document.body.querySelector('.right-anchored')).toBeInTheDocument();
@@ -74,9 +74,9 @@ describe(TooltipDirective.name, () => {
 
   it('Should render with the provided theme properly', async () => {
     testBedComponent.theme.set('dark');
-    testBedComponent.dispatchEvent('pointerover');
+    await delayBy(16);
 
-    await delayBy(250);
+    testBedComponent.dispatchEvent('pointerover');
 
     expect(document.body.querySelector(`${classSelectorPrefix}.light-theme`)).not.toBeInTheDocument();
     expect(document.body.querySelector(`${classSelectorPrefix}.dark-theme`)).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe(TooltipDirective.name, () => {
   it('Should show tooltip on pointerover', async () => {
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
@@ -95,7 +95,7 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(screen.getByText('Hello World')).toBeInTheDocument();
 
@@ -110,7 +110,7 @@ describe(TooltipDirective.name, () => {
     testBedComponent.buttonRef.nativeElement.focus();
     testBedComponent.dispatchEvent('keyup');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
@@ -119,7 +119,7 @@ describe(TooltipDirective.name, () => {
     testBedComponent.buttonRef.nativeElement.focus();
     testBedComponent.dispatchEvent('keyup');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(screen.getByText('Hello World')).toBeInTheDocument();
 
@@ -152,7 +152,7 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(screen.getByText('Hello TooltipDirective')).toBeInTheDocument();
   });
@@ -164,7 +164,7 @@ describe(TooltipDirective.name, () => {
 
     testBedComponent.dispatchEvent('pointerover');
 
-    await delayBy(250);
+    await delayBy(16);
 
     expect(document.body.querySelector(`${classSelectorPrefix}__content`)).not.toBeInTheDocument();
   });

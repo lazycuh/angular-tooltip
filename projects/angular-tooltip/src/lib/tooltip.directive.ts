@@ -1,5 +1,4 @@
-/* eslint-disable @angular-eslint/no-input-rename */
-import { afterNextRender, DestroyRef, Directive, ElementRef, Host, HostListener, inject, Input } from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, ElementRef, Host, HostListener, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TooltipService } from './tooltip.service';
@@ -11,20 +10,13 @@ import { isMobile, watchForLongPress } from './utils';
   selector: '[lcTooltip]'
 })
 export class TooltipDirective {
-  @Input({ alias: 'lcTooltip', required: true })
-  _content: TooltipConfiguration['content'] = '';
+  readonly content = input.required<TooltipConfiguration['content']>({ alias: 'lcTooltip' });
 
-  @Input('lcTooltipPlacement')
-  _placement?: TooltipConfiguration['placement'] = 'vertical';
-
-  @Input('lcTooltipTheme')
-  _theme?: TooltipConfiguration['theme'];
-
-  @Input('lcTooltipShowWhenDisabled')
-  _shouldShowWhenDisabled = false;
+  readonly placement = input<TooltipConfiguration['placement']>('vertical', { alias: 'lcTooltipPlacement' });
+  readonly theme = input<TooltipConfiguration['theme']>(undefined, { alias: 'lcTooltipTheme' });
+  readonly shouldShowWhenDisabled = input(false, { alias: 'lcTooltipShowWhenDisabled' });
 
   private _isLongPressing = false;
-  private _timeoutId = -1;
   private _tooltipRef?: TooltipRef;
 
   constructor(
@@ -62,20 +54,20 @@ export class TooltipDirective {
 
     // Only show the tooltip if the content is present and the anchor is not disabled
     // or if the tooltip should be shown when disabled
-    if (this._content && (!('disabled' in tooltipAnchor) || !tooltipAnchor.disabled || this._shouldShowWhenDisabled)) {
-      this._timeoutId = window.setTimeout(() => {
-        this._tooltipRef = this._tooltipService.show(tooltipAnchor, {
-          content: this._content,
-          placement: this._placement!,
-          theme: this._theme
-        });
-      }, 250);
+    if (
+      this.content() &&
+      (!('disabled' in tooltipAnchor) || !tooltipAnchor.disabled || this.shouldShowWhenDisabled())
+    ) {
+      this._tooltipRef = this._tooltipService.show(tooltipAnchor, {
+        content: this.content(),
+        placement: this.placement(),
+        theme: this.theme()
+      });
     }
   }
 
   private _hideTooltip(event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
-    clearTimeout(this._timeoutId);
 
     this._tooltipRef?.hide();
   }
@@ -99,6 +91,7 @@ export class TooltipDirective {
 
   @HostListener('pointerout', ['$event'])
   @HostListener('blur', ['$event'])
+  @HostListener('click', ['$event'])
   protected _onHideTooltip(event: MouseEvent | KeyboardEvent) {
     if (!this._isLongPressing) {
       this._hideTooltip(event);
