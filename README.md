@@ -35,6 +35,7 @@ Easily show tooltips programmatically and/or declaratively in Angular.
 
 | This library | Angular |
 | ------------ | ------- |
+| 3.x.x        | 20.x.x  |
 | 2.x.x        | 19.x.x  |
 | 1.x.x        | 16 - 18 |
 

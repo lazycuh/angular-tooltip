@@ -1,4 +1,12 @@
-import { ApplicationRef, ComponentRef, createComponent, EmbeddedViewRef, Injectable, TemplateRef } from '@angular/core';
+import {
+  ApplicationRef,
+  ComponentRef,
+  createComponent,
+  EmbeddedViewRef,
+  inject,
+  Injectable,
+  TemplateRef
+} from '@angular/core';
 
 import { Theme } from './theme';
 import { TooltipComponent } from './tooltip.component';
@@ -18,8 +26,7 @@ export class TooltipService {
   private static _defaultTheme: Theme = 'light';
 
   private readonly _openedTooltips = new Set<TooltipRef>();
-
-  constructor(private readonly _applicationRef: ApplicationRef) {}
+  private readonly _applicationRef = inject(ApplicationRef);
 
   /**
    * Set the default theme that will be used for all tooltips created in the future.

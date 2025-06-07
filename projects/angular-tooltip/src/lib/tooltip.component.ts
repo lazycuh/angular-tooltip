@@ -1,9 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
-  Host,
-  OnDestroy,
+  inject,
   signal,
   ViewEncapsulation
 } from '@angular/core';
@@ -14,7 +14,6 @@ import { Theme } from './theme';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-
   host: {
     class: 'lc-tooltip-container'
   },
@@ -22,7 +21,7 @@ import { Theme } from './theme';
   styleUrls: ['./tooltip.component.scss'],
   templateUrl: './tooltip.component.html'
 })
-export class TooltipComponent implements OnDestroy {
+export class TooltipComponent {
   protected readonly _content = signal('');
   protected readonly _idForAriaDescribedBy = signal(
     `__${btoa(String(Math.random() + Math.random()))
@@ -40,6 +39,8 @@ export class TooltipComponent implements OnDestroy {
    */
   protected readonly _theme = signal<Theme>('light');
 
+  private readonly _host = inject<ElementRef<HTMLElement>>(ElementRef, { host: true });
+
   private _placement: Placement = 'vertical';
 
   /**
@@ -54,16 +55,17 @@ export class TooltipComponent implements OnDestroy {
 
   private _isVisible = false;
 
-  constructor(@Host() private readonly _host: ElementRef<HTMLElement>) {}
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    destroyRef.onDestroy(() => {
+      this._afterClosedListener = undefined;
+    });
+  }
 
   hide() {
     this._isVisible = false;
     this._tooltip.classList.remove('is-entering');
     this._tooltip.classList.add('is-leaving');
-  }
-
-  ngOnDestroy() {
-    this._afterClosedListener = undefined;
   }
 
   setClassName(className: string) {

@@ -1,4 +1,4 @@
-import { afterNextRender, DestroyRef, Directive, ElementRef, Host, HostListener, inject, input } from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, ElementRef, HostListener, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TooltipService } from './tooltip.service';
@@ -16,13 +16,13 @@ export class TooltipDirective {
   readonly theme = input<TooltipConfiguration['theme']>(undefined, { alias: 'lcTooltipTheme' });
   readonly shouldShowWhenDisabled = input(false, { alias: 'lcTooltipShowWhenDisabled' });
 
+  private readonly _hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef, { host: true });
+  private readonly _tooltipService = inject(TooltipService);
+
   private _isLongPressing = false;
   private _tooltipRef?: TooltipRef;
 
-  constructor(
-    @Host() private readonly _hostElement: ElementRef<HTMLElement>,
-    private readonly _tooltipService: TooltipService
-  ) {
+  constructor() {
     const destroyRef = inject(DestroyRef);
 
     afterNextRender({
@@ -32,7 +32,7 @@ export class TooltipDirective {
         });
 
         if (isMobile()) {
-          watchForLongPress(this._hostElement.nativeElement)
+          watchForLongPress(this._hostElementRef.nativeElement)
             .pipe(takeUntilDestroyed(destroyRef))
             .subscribe({
               next: event => {
@@ -84,7 +84,7 @@ export class TooltipDirective {
 
   @HostListener('keyup', ['$event'])
   protected _onShowTooltipOnFocus(event: KeyboardEvent) {
-    if (document.activeElement === this._hostElement.nativeElement) {
+    if (document.activeElement === this._hostElementRef.nativeElement) {
       this._showTooltip(event);
     }
   }
@@ -100,7 +100,7 @@ export class TooltipDirective {
 
   @HostListener('window:pointerup', ['$event'])
   protected _onHideTooltipOnWindowPointerUp(event: PointerEvent) {
-    if (this._isLongPressing && event.target !== this._hostElement.nativeElement) {
+    if (this._isLongPressing && event.target !== this._hostElementRef.nativeElement) {
       this._hideTooltip(event);
     }
   }

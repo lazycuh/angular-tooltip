@@ -8,7 +8,7 @@ import baseConfig from '@lazycuh/eslint-config-base-with-vitest';
  */
 export default tsEslint.config(
   {
-    files: ['**/src/**/*.ts'],
+    files: ['**/{src,test}/**/*.ts'],
     extends: [...baseConfig, ...angular.configs.tsRecommended],
     processor: angular.processInlineTemplates,
     rules: {
@@ -28,7 +28,7 @@ export default tsEslint.config(
           style: 'camelCase'
         }
       ],
-      '@angular-eslint/no-host-metadata-property': 'off',
+      '@angular-eslint/no-input-rename': 'off',
       '@angular-eslint/prefer-on-push-component-change-detection': 'error',
       'import/no-unresolved': 'off'
     }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, TemplateRef, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, TemplateRef, viewChild } from '@angular/core';
 import { screen } from '@testing-library/angular';
 import { delayBy, renderComponent } from 'projects/angular-tooltip/test/helpers';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -22,7 +22,7 @@ import { TooltipConfiguration } from './tooltip-configuration';
 class TestBedComponent {
   readonly templateRefContent = viewChild.required('templateRefContent', { read: TemplateRef });
 
-  constructor(private readonly _service: TooltipService) {}
+  private readonly _service = inject(TooltipService);
 
   showTooltip(anchor: Element, config: Partial<TooltipConfiguration> = {}) {
     this._service.show(anchor, {

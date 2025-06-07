@@ -1,15 +1,10 @@
-/* eslint-disable import/order */
 import '@testing-library/jest-dom';
 
 import { TestBed } from '@angular/core/testing';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { TextDecoder, TextEncoder } from 'util';
+import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import { afterEach, vi } from 'vitest';
 
-(global as Record<string, unknown>)['TextEncoder'] = TextEncoder;
-(global as Record<string, unknown>)['TextDecoder'] = TextDecoder;
-
-TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+TestBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
 
 afterEach(() => {
   vi.resetAllMocks();

@@ -6,13 +6,13 @@ orbs:
 parameters:
   node-image:
     type: string
-    default: 'node:18.20.3'
+    default: 'node:22.16.0'
 
 install-pnpm: &install-pnpm
   name: Installing pnpm package manager
   command: |
     corepack enable
-    corepack prepare pnpm@latest-8 --activate
+    corepack prepare pnpm@latest-9 --activate
 
 jobs:
   versioning:
@@ -69,14 +69,17 @@ jobs:
 
   unit-testing:
     docker:
-      - image: cimg/node:18.20.3-browsers
+      - image: cimg/node:22.16.0-browsers
     steps:
       - checkout
       - attach_workspace:
           at: .
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - run:
           name: Unit testing
           command: |
+            pnpm exec playwright install --with-deps
             pnpm test:ci
 
   building:

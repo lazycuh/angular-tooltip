@@ -24,15 +24,15 @@
     "popup service"
   ],
   "peerDependencies": {
-    "@angular/common": "19",
-    "@angular/core": "19"
+    "@angular/common": "20",
+    "@angular/core": "20"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/lazycuh/angular-tooltip"
   },
   "devDependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.8.1"
   },
   "sideEffects": false,
   "publishConfig": {

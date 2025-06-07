@@ -1,8 +1,7 @@
 import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
-import { provideExperimentalZonelessChangeDetection, Type } from '@angular/core';
+import { provideZonelessChangeDetection, Type } from '@angular/core';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { render, RenderComponentOptions, RenderResult } from '@testing-library/angular';
-import { delayBy } from './delay-by';
 
 export async function renderComponent<T>(
   component: Type<T>,
@@ -10,7 +9,7 @@ export async function renderComponent<T>(
 ): Promise<RenderResult<T>> {
   options.providers ??= [];
   // Have to add these providers to the beginning of the array to avoid weird failures during testing
-  options.providers.unshift(provideNoopAnimations(), provideExperimentalZonelessChangeDetection(), {
+  options.providers.unshift(provideNoopAnimations(), provideZonelessChangeDetection(), {
     provide: DATE_PIPE_DEFAULT_OPTIONS,
     useValue: { timezone: '-1200' }
   });

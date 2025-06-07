@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
-import { ChangeDetectionStrategy, Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { fireEvent, screen } from '@testing-library/angular';
 import { delayBy, renderComponent } from 'projects/angular-tooltip/test/helpers';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Placement } from './placement';
 import { Theme } from './theme';
 import { TooltipDirective } from './tooltip.directive';
+import { TooltipService } from './tooltip.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,12 +36,18 @@ class TestBedComponent {
   @ViewChild('button', { read: ElementRef })
   readonly buttonRef!: ElementRef<HTMLButtonElement>;
 
+  private readonly _tooltipService = inject(TooltipService);
+
   dispatchEvent<T extends keyof HTMLElementEventMap = keyof HTMLElementEventMap>(
     eventType: T,
     eventDetail?: CustomEventInit<HTMLElementEventMap[T]>['detail']
   ) {
     const customEvent = new CustomEvent(eventType, eventDetail);
     this.buttonRef.nativeElement.dispatchEvent(customEvent);
+  }
+
+  cleanup() {
+    this._tooltipService.hideAll();
   }
 }
 
@@ -51,6 +58,10 @@ describe(TooltipDirective.name, () => {
   beforeEach(async () => {
     const renderResult = await renderComponent(TestBedComponent);
     testBedComponent = renderResult.fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    testBedComponent.cleanup();
   });
 
   it('Should render the provided content properly', async () => {

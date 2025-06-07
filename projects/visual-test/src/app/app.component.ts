@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, TemplateRef } from '@angular/core';
 import { TooltipDirective, TooltipService } from 'projects/angular-tooltip/src/public-api';
 
 @Component({
@@ -9,7 +9,7 @@ import { TooltipDirective, TooltipService } from 'projects/angular-tooltip/src/p
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  constructor(private readonly _tooltipService: TooltipService) {}
+  private readonly _tooltipService = inject(TooltipService);
 
   onShowTooltip(button: HTMLButtonElement, templateRefContent: TemplateRef<unknown>) {
     this._tooltipService.show(button, {
