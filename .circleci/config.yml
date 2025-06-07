@@ -114,12 +114,10 @@ jobs:
             ../../.circleci/scripts/publish-to-npm-registry.sh
 
 workflows:
-  deployment:
+  merge-request:
+    when: pipeline.git.branch != "main"
     jobs:
-      - versioning
-      - installation:
-          requires:
-            - versioning
+      - installation
       - linting:
           requires:
             - installation
@@ -129,13 +127,19 @@ workflows:
       - building:
           requires:
             - installation
+
+  deployment:
+    when: pipeline.git.branch == "main"
+    jobs:
+      - versioning
+      - installation:
+          requires:
+            - versioning
+      - building:
+          requires:
+            - installation
       - publish-to-npm-registry:
-          filters:
-            branches:
-              only: main
           context:
             - npm
           requires:
-            - linting
-            - unit-testing
             - building

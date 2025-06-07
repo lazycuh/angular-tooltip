@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
     plugins: [angular(), viteTsConfigPaths()],
     test: {
       browser: {
-        enabled: false,
+        enabled: true,
         headless: true,
         instances: [{ browser: 'chromium' }],
         provider: 'playwright'
