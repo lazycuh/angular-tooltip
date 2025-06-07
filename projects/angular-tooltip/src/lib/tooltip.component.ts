@@ -103,6 +103,8 @@ export class TooltipComponent {
     document.body.appendChild(this._host.nativeElement);
     this._tooltip.querySelector('.lc-tooltip__content')?.appendChild(content);
 
+    this._isVisible = true;
+
     switch (this._placement) {
       case 'vertical':
         this._showBottom(anchorBoundingBox);
@@ -155,7 +157,6 @@ export class TooltipComponent {
       this._tooltip.style.left = `${tooltipLeft - horizontalDifference}px`;
       this._tooltip.style.top = `${tooltipTop}px`;
 
-      this._isVisible = true;
       this._tooltip.classList.add('is-entering');
     }, 64);
   }

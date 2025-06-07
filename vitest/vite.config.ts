@@ -12,12 +12,6 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [angular(), viteTsConfigPaths()],
     test: {
-      browser: {
-        enabled: false,
-        headless: true,
-        instances: [{ browser: 'chromium' }],
-        provider: 'playwright'
-      },
       environment: 'happy-dom',
       exclude: ['**/*.js', '**/*.mjs', '**/*.mts'],
       globals: true,

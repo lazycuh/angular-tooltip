@@ -48,8 +48,6 @@ export class TooltipDirective {
   private _showTooltip(event: MouseEvent | KeyboardEvent | PointerEvent) {
     event.stopPropagation();
 
-    this._hideTooltip(event);
-
     const tooltipAnchor = event.target as Element;
 
     // Only show the tooltip if the content is present and the anchor is not disabled
